@@ -1,4 +1,4 @@
-.main {
+/* .main {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -79,7 +79,7 @@
   position: relative;
   padding: 4rem 0;
   gap: 4rem;
-}
+} */
 
 /* Enable hover only on non-touch devices */
 @media (hover: hover) and (pointer: fine) {

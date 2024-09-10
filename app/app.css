@@ -1,15 +1,15 @@
-body {
+/* body {
     margin: 0;
-    background: linear-gradient(180deg, rgb(117, 81, 194), rgb(255, 255, 255));
+    background: linear-gradient(180deg, rgb(134, 125, 164), rgb(255, 255, 255));
     display: flex;
     font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
     height: 100vh;
     width: 100vw;
     justify-content: center;
     align-items: center;
-  }
+  } */
   
-  main {
+  /* main {
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -62,4 +62,56 @@ body {
   a {
     font-weight: 800;
     text-decoration: none;
-  }
+  } */
+
+  /* code names */
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: white;
+    /* background: linear-gradient(180deg, rgb(56, 62, 65), rgb(255, 255, 255)); */
+}
+.game-board {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    column-gap: 10px;
+    row-gap: 10px;
+    margin: 20px;
+}
+.card {
+    height: 100px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+.card.red { background-color: #ffcccb; }
+.card.blue { background-color: #cce5ff; }
+.card.neutral { background-color: #f5f5dc; }
+.card.assassin { background-color: #2f4f4f; color: white; }
+.controls, .category-input {
+    margin: 20px;
+}
+.spymaster-toggle {
+    margin-bottom: 10px;
+}
+.turn-indicator {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.category-input input {
+    width: 200px;
+    margin: 5px;
+}
+.loading {
+    display: none;
+    margin: 20px;
+    font-style: italic;
+}
