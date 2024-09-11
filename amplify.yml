@@ -7,8 +7,12 @@ backend:
         - npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID
 frontend:
   phases:
+    preBuild:
+        commands:
+          - echo "OPENAI_API_KEY is set: $(if [ -z \"$OPENAI_API_KEY\" ]; then echo "No"; else echo "Yes"; fi)"
     build:
       commands:
+        - echo "OPENAI_API_KEY=$OPENAI_API_KEY" >> .env.production.local
         - npm run build
   artifacts:
     baseDirectory: .next
