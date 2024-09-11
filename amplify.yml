@@ -12,7 +12,7 @@ frontend:
           - 'echo "OPENAI_API_KEY is set: $(if [ -z \"$OPENAI_API_KEY\" ]; then echo \"No\"; else echo \"Yes\"; fi)"'
     build:
       commands:
-        - 'echo "OPENAI_API_KEY=$OPENAI_API_KEY" >> .env.production.local'
+        - env | grep -e OPENAI_API_KEY >> .env.production
         - npm run build
   artifacts:
     baseDirectory: .next
