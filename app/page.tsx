@@ -50,7 +50,7 @@ export default function App() {
   const handleGameIDChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setGameState((prevState) => ({
       ...prevState,
-      gameID: e.target.value,  // Updating gameID in gameState
+      gameId: e.target.value,  // Updating gameId in gameState
     }));
   };
 
@@ -66,7 +66,7 @@ export default function App() {
   async function handleGenerateWords() {
     
     if (gameState.gameId === undefined) {
-      alert("Please enter all game ID.");
+      alert("Please enter game ID.");
       return;
     }
 
@@ -236,7 +236,7 @@ export default function App() {
       <div className="game-id-input">
         <input
           type="text"
-          id="gameID"
+          id="gameId"
           placeholder="Enter Game ID"
           value={gameState.gameId}  // Controlled input
           onChange={handleGameIDChange}
