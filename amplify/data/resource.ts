@@ -58,7 +58,7 @@ Fetch records from the database and use them in your frontend component.
 //code names 
 
 // Define the schema for the CodenamesGames table
-const gameSessionsSchema = a.schema({
+const schema = a.schema({
   GameSessions: a
     .model({
       GameID: a.string(), // Partition Key
@@ -74,7 +74,7 @@ const gameSessionsSchema = a.schema({
 });
 
 // Export the schema type
-export type GameSessionsSchema = ClientSchema<typeof gameSessionsSchema>;
+export type GameSessionsSchema = ClientSchema<typeof schema>;
 
 // Define and export the Amplify data configuration
 export const gameSessionsdata = defineData({
