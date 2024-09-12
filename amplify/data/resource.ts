@@ -54,3 +54,35 @@ Fetch records from the database and use them in your frontend component.
 // const { data: todos } = await client.models.Todo.list()
 
 // return <ul>{todos.map(todo => <li key={todo.id}>{todo.content}</li>)}</ul>
+
+//code names 
+
+// Define the schema for the CodenamesGames table
+const gameSessionsSchema = a.schema({
+  GameSessions: a
+    .model({
+      GameID: a.string(), // Partition Key
+      CurrentTeam: a.string(), // Current team (red or blue)
+      RedCardsLeft: a.integer(), // Number of red cards left
+      BlueCardsLeft: a.integer(), // Number of blue cards left
+      Categories: a.json(),  // Using JSON to represent the list of categories
+      Cards: a.json(),       // Using JSON to represent the list of card objects
+    })
+    .authorization((allow) => [
+      allow.publicApiKey(), // Allow API key-based access
+    ]),
+});
+
+// Export the schema type
+export type GameSessionsSchema = ClientSchema<typeof gameSessionsSchema>;
+
+// Define and export the Amplify data configuration
+export const gameSessionsdata = defineData({
+  schema,
+  authorizationModes: {
+    defaultAuthorizationMode: "apiKey",
+    apiKeyAuthorizationMode: {
+      expiresInDays: 30, // API key expires after 30 days
+    },
+  },
+});

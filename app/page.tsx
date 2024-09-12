@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { generateClient } from "aws-amplify/data";
-import type { Schema } from "@/amplify/data/resource";
+import type { GameSessionsSchema } from "@/amplify/data/resource";
 import "./../app/app.css";
 import { Amplify } from "aws-amplify";
 import outputs from "@/amplify_outputs.json";
@@ -10,7 +10,8 @@ import "@aws-amplify/ui-react/styles.css";
 
 Amplify.configure(outputs);
 
-const client = generateClient<Schema>();
+
+const dynamoDbClient = generateClient<GameSessionsSchema>();
 
 type Card = {
   word: string;
@@ -29,20 +30,31 @@ export default function App() {
   const [words, setWords] = useState<string[]>([]);
 
   const [gameState, setGameState] = useState<{
+    gameId: string | undefined;
     currentTeam: string;
     redCardsLeft: number;
     blueCardsLeft: number;
     cards: Card[]; // Explicitly typing the cards array
   }>({
+    gameId: undefined, // Initial empty gameID
     currentTeam: "red",
     redCardsLeft: 9,
     blueCardsLeft: 8,
-    cards: [],
+    cards: [], // Initial empty gameID
   });
 
   const [loading, setLoading] = useState(false);
   const [spymasterView, setSpymasterView] = useState(false);
 
+  // Handle gameID input change and update gameState
+  const handleGameIDChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setGameState((prevState) => ({
+      ...prevState,
+      gameID: e.target.value,  // Updating gameID in gameState
+    }));
+  };
+
+  // Handle categories input change and update categories state
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setCategories((prevCategories) => ({
@@ -52,6 +64,12 @@ export default function App() {
   };
 
   async function handleGenerateWords() {
+    
+    if (gameState.gameId === undefined) {
+      alert("Please enter all game ID.");
+      return;
+    }
+
     const categoryValues = Object.values(categories).filter((cat) => cat.trim() !== "");
   
     if (categoryValues.length < 5) {
@@ -83,6 +101,7 @@ export default function App() {
       if (Array.isArray(parsedWords)) {
         setWords(parsedWords.flat());
         createBoard(parsedWords.flat());
+        insertNewGameToDynamo();
       } else {
         throw new Error("Invalid format of generated words");
       }
@@ -113,6 +132,31 @@ export default function App() {
       })),
     }));
   }
+
+  async function insertNewGameToDynamo() {
+   
+    if (!gameState.gameId) {
+      alert("Please enter a game ID.");
+      return;
+    }
+  
+    try {
+      await dynamoDbClient.models.GameSessions.create({
+        GameID: gameState.gameId,
+        CurrentTeam: gameState.currentTeam,
+        RedCardsLeft: gameState.redCardsLeft,
+        BlueCardsLeft: gameState.blueCardsLeft,
+        Categories: JSON.stringify(words), 
+        Cards: JSON.stringify(gameState.cards), 
+      });
+  
+      console.log("New game record created successfully in DynamoDB");
+    } catch (error) {
+      console.error("Error creating game record in DynamoDB:", error);
+      alert("There was an error saving the game. Please try again.");
+    }
+  }
+  
 
   function revealCard(index: number) {
     const newCards = [...gameState.cards];
@@ -189,6 +233,16 @@ export default function App() {
   return (
     <main>
       <h2>Codenames AI Game</h2>
+      <div className="game-id-input">
+        <input
+          type="text"
+          id="gameID"
+          placeholder="Enter Game ID"
+          value={gameState.gameId}  // Controlled input
+          onChange={handleGameIDChange}
+        />
+      </div>
+
       <div className="category-input">
         <input type="text" id="category1" placeholder="Category 1" value={categories.category1} onChange={handleChange} />
         <input type="text" id="category2" placeholder="Category 2" value={categories.category2} onChange={handleChange} />
