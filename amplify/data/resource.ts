@@ -61,12 +61,12 @@ Fetch records from the database and use them in your frontend component.
 const schema = a.schema({
   GameSessions: a
     .model({
-      GameID: a.string(), // Partition Key
-      CurrentTeam: a.string(), // Current team (red or blue)
-      RedCardsLeft: a.integer(), // Number of red cards left
-      BlueCardsLeft: a.integer(), // Number of blue cards left
-      Categories: a.json(),  // Using JSON to represent the list of categories
-      Cards: a.json(),       // Using JSON to represent the list of card objects
+      GameID: a.string().required(), // Partition Key
+      CurrentTeam: a.string().required(), // Current team (red or blue)
+      RedCardsLeft: a.integer().required(), // Number of red cards left
+      BlueCardsLeft: a.integer().required(), // Number of blue cards left
+      Categories: a.json().required(),  // Using JSON to represent the list of categories
+      Cards: a.json().required(),       // Using JSON to represent the list of card objects
     })
     .authorization((allow) => [
       allow.publicApiKey(), // Allow API key-based access
