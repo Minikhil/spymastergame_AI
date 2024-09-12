@@ -178,12 +178,15 @@ export default function App() {
               Cards: JSON.stringify(gameState.cards),  // Update cards if needed
             };
   
-            // Update the record in DynamoDB
+            // Update the record in DynamoDB (only once)
             await dynamoDbClient.models.GameSessions.update(updatedRecord);
             console.log("Game record updated successfully in DynamoDB");
           } else {
             console.log("No game record found for this gameId");
           }
+  
+          // Unsubscribe from the subscription after processing the initial data
+          subscription.unsubscribe();
         },
         error: (error) => {
           console.error("Error fetching game record:", error);
@@ -191,7 +194,7 @@ export default function App() {
         },
       });
   
-      return () => subscription.unsubscribe(); // Cleanup function
+      return () => subscription.unsubscribe(); // Cleanup function (optional)
     } catch (error) {
       console.error("Error updating game record:", error);
       // Handle error (e.g., display message)
@@ -274,31 +277,31 @@ export default function App() {
     toggleAllCardsVisibility(spymasterView);
   }, [spymasterView]);
 
-  useEffect(() => {
-    const subscription = dynamoDbClient.models.GameSessions.observeQuery({
-      filter: { GameID: { eq: gameState.gameId } }, // Filter by gameId
-    }).subscribe({
-      next: ({ items }) => {
-        if (items.length > 0) {
-          const gameRecord = items[0]; // Assuming there's only one record per gameId
-          setGameState((prevState) => ({
-             ...prevState,
-            currentTeam: gameRecord.CurrentTeam,
-            redCardsLeft: gameRecord.RedCardsLeft,
-            blueCardsLeft: gameRecord.BlueCardsLeft,
-            cards: JSON.parse(JSON.parse(gameRecord.Cards as string)), // Parse Cards back into an array
-          }));
-        } else {
-          console.log("No game record found for this gameId");
-        }
-      },
-      error: (error) => {
-        console.error("Error fetching game record:", error);
-      },
-    });
+  // useEffect(() => {
+  //   const subscription = dynamoDbClient.models.GameSessions.observeQuery({
+  //     filter: { GameID: { eq: gameState.gameId } }, // Filter by gameId
+  //   }).subscribe({
+  //     next: ({ items }) => {
+  //       if (items.length > 0) {
+  //         const gameRecord = items[0]; // Assuming there's only one record per gameId
+  //         setGameState((prevState) => ({
+  //            ...prevState,
+  //           currentTeam: gameRecord.CurrentTeam,
+  //           redCardsLeft: gameRecord.RedCardsLeft,
+  //           blueCardsLeft: gameRecord.BlueCardsLeft,
+  //           cards: JSON.parse(gameRecord.Cards as string), // Parse Cards back into an array
+  //         }));
+  //       } else {
+  //         console.log("No game record found for this gameId");
+  //       }
+  //     },
+  //     error: (error) => {
+  //       console.error("Error fetching game record:", error);
+  //     },
+  //   });
   
-    return () => subscription.unsubscribe(); // Cleanup function to unsubscribe
-  }, [gameState.cards]); // Dependency on gameId state
+  //   return () => subscription.unsubscribe(); // Cleanup function to unsubscribe
+  // }, [gameState.cards]); // Dependency on gameId state
   
   return (
     <main>
