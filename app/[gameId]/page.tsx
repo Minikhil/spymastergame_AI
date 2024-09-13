@@ -1,3 +1,3 @@
 export default function Page({ params }: { params: { gameId: string } }) {
-    return <div>My Post: {params.gameId}</div>
+    return <div>Code Names Game ID: {params.gameId}</div>
   }

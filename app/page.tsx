@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { generateClient } from "aws-amplify/data";
 import type { GameSessionsSchema } from "@/amplify/data/resource";
+import { useRouter } from 'next/navigation'
 import "./../app/app.css";
 import { Amplify } from "aws-amplify";
 import outputs from "@/amplify_outputs.json";
@@ -20,6 +21,8 @@ type Card = {
 };
 
 export default function App() {
+
+  const router = useRouter(); // Use useRouter for navigation
   const [categories, setCategories] = useState({
     category1: "",
     category2: "",
@@ -110,6 +113,8 @@ export default function App() {
       alert("There was an error generating words. Please try again.");
     } finally {
       setLoading(false);
+       // Redirect to the dynamic game page using the gameId
+       router.push(`/${gameState.gameId}`);
     }
   }
   
