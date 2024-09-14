@@ -50,29 +50,48 @@ export default function Page({ params }: { params: { gameId: string } }) {
   const [loading, setLoading] = useState(false);
   const [spymasterView, setSpymasterView] = useState(false);
 
-  async function syncGameBoard() {
+  async function syncGameBoard(isFirst: boolean) {
     try {
+      console.log("syncBoard is First? ")
+      console.log(isFirst)
+      
       // Fetch the latest record using observeQuery and filter
       const subscription = dynamoDbClient.models.GameSessions.observeQuery({
-        filter: { GameID: { eq: gameState.gameId } }, // Filter by gameId
+        filter: { GameID: { eq: gameState.gameId?.trim() } }, // Filter by gameId
       }).subscribe({
         next: async ({ items }) => {
+          console.log("Fetch data for gameID: " + gameState.gameId)
           if (items.length > 0) {
+            console.log("Items received: ", items);
             // Extract the latest record (assuming descending sort on createdAt)
             const latestGameRecord = items[0];
+            console.log("Fetched record: ", latestGameRecord);
   
-            // Update the record with latest data and state
-            const updatedRecord = {
-              ...latestGameRecord,
-              CurrentTeam: gameState.currentTeam,
-              RedCardsLeft: gameState.redCardsLeft,
-              BlueCardsLeft: gameState.blueCardsLeft,
-              Cards: JSON.stringify(gameState.cards),  // Update cards if needed
-            };
-  
-            // Update the record in DynamoDB (only once)
-            await dynamoDbClient.models.GameSessions.update(updatedRecord);
-            console.log("Game record updated successfully in DynamoDB");
+            if (isFirst) {
+              setGameState((prevState) => ({
+                ...prevState,
+                blueCardsLeft: latestGameRecord.BlueCardsLeft,
+                redCardsLeft: latestGameRecord.RedCardsLeft,
+                cards: JSON.parse(latestGameRecord.Cards as string) as Card[],
+              }));
+
+            } else {
+              // Update the record with latest data and state
+              const updatedRecord = {
+                ...latestGameRecord,
+                CurrentTeam: gameState.currentTeam,
+                RedCardsLeft: gameState.redCardsLeft,
+                BlueCardsLeft: gameState.blueCardsLeft,
+                Cards: JSON.stringify(gameState.cards),  // Update cards if needed
+              };
+
+              console.log("Updating record with cards: ", updatedRecord.Cards);
+
+              // Update the record in DynamoDB (only once)
+              await dynamoDbClient.models.GameSessions.update(updatedRecord);
+              console.log("Game record updated successfully in DynamoDB");
+            }
+            
           } else {
             console.log("No game record found for this gameId");
           }
@@ -96,25 +115,131 @@ export default function Page({ params }: { params: { gameId: string } }) {
   /**
    * when gameId or cards are update sync the baord 
    */
+  // useEffect(() => {
+  //   syncGameBoard(true);
+  // }, [gameState.gameId]);
+
   useEffect(() => {
-    syncGameBoard();
-  }, [params.gameId, gameState.cards]);
+    if (gameState.gameId) {
+      console.log("Syncing game board with gameId:", gameState.gameId);
+      syncGameBoard(true);
+    } else {
+      console.log("gameState.gameId is undefined or empty. Sync not triggered.");
+    }
+  }, [gameState.gameId]);
+  
 
+  
+  function revealCard(index: number) {
+    const newCards = [...gameState.cards];
+    const card = newCards[index];
 
+    if (!card.revealed) {
+      card.revealed = true;
+      if (card.type === "assassin") {
+        endGame(gameState.currentTeam === "red" ? "blue" : "red");
+      } else {
+        updateCardCount(card.type);
+      }
+    }
 
+    setGameState((prevState) => ({
+      ...prevState,
+      cards: newCards,
+    }));
+
+    //Make a call to DB to update cards 
+    //syncGameBoard();
+  }
+
+  function updateCardCount(type: string) {
+    if (type === "red") {
+      setGameState((prevState) => ({
+        ...prevState,
+        redCardsLeft: prevState.redCardsLeft - 1,
+      }));
+    } else if (type === "blue") {
+      setGameState((prevState) => ({
+        ...prevState,
+        blueCardsLeft: prevState.blueCardsLeft - 1,
+      }));
+    }
+  }
+  
+  function endTurn() {
+    setGameState((prevState) => ({
+      ...prevState,
+      currentTeam: prevState.currentTeam === "red" ? "blue" : "red",
+    }));
+  }
+
+  function shuffleArray(array: any[]) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
   
   
+  function endGame(winner: string) {
+    alert(`${winner.charAt(0).toUpperCase() + winner.slice(1)} team wins!`);
+    //createBoard(words); // Reset board
+  }
+
+  function toggleAllCardsVisibility(reveal: boolean) {
+    setGameState((prevState) => ({
+      ...prevState,
+      cards: prevState.cards.map((card) => ({
+        ...card,
+        revealed: reveal,
+      })),
+    }));
+  }
   
-  
-  
-  
-  
-  
-  
-  
+  // useEffect(() => {
+  //   toggleAllCardsVisibility(spymasterView);
+  // }, [spymasterView]);
+
+  console.log("game state: " + gameState.gameId + " " + gameState.blueCardsLeft);
+
+  console.log("cards: " + JSON.stringify(gameState.cards));
   
   return (
-  <div>Code Names Game ID: {params.gameId}</div>
+  <main>
+    <div>Code Names Game ID: {params.gameId}</div>
+    <div className="spymaster-toggle">
+        <label>
+          <input
+            type="checkbox"
+            checked={spymasterView}
+            onChange={(e) => setSpymasterView(e.target.checked)}
+          />
+          Spymaster View
+        </label>
+      </div>
+
+      <div className="turn-indicator">
+        {`${gameState.currentTeam.charAt(0).toUpperCase() + gameState.currentTeam.slice(1)} Team's Turn`}
+      </div>
+
+      <div className="game-board">
+        {gameState.cards.map((card, i) => (
+          <div
+            key={i}
+            className={`card ${card.revealed ? card.type : ""}`}
+            onClick={() => revealCard(i)}
+          >
+            {card.word}
+          </div>
+        ))}
+      </div>
+
+      <div className="controls">
+        <button onClick={() => createBoard(words)}>New Game</button>
+        <button onClick={endTurn}>End Turn</button>
+      </div>
+  </main>
   );
   
   }
