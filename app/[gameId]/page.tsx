@@ -236,7 +236,7 @@ export default function Page({ params }: { params: { gameId: string } }) {
       </div>
 
       <div className="controls">
-        <button onClick={() => createBoard(words)}>New Game</button>
+        <button>New Game</button>
         <button onClick={endTurn}>End Turn</button>
       </div>
   </main>
