@@ -35,12 +35,14 @@ export default function Page({ params }: { params: { gameId: string } }) {
     currentTeam: string;
     redCardsLeft: number;
     blueCardsLeft: number;
+    categories: [];
     cards: Card[]; // Explicitly typing the cards array
   }>({
     gameId: undefined, // Initial empty gameID
     currentTeam: "red",
     redCardsLeft: 9,
     blueCardsLeft: 8,
+    categories: [],
     cards: [], // Initial empty gameID
   });
 
@@ -68,15 +70,17 @@ export default function Page({ params }: { params: { gameId: string } }) {
             console.log("Fetched record: ", latestGameRecord);
   
             if (isFirst) {
+              //first time fetch just grab data from DB
               setGameState((prevState) => ({
                 ...prevState,
+                categories: JSON.parse(latestGameRecord.Categories as string) as [],
                 blueCardsLeft: latestGameRecord.BlueCardsLeft,
                 redCardsLeft: latestGameRecord.RedCardsLeft,
                 cards: JSON.parse(latestGameRecord.Cards as string) as Card[],
               }));
 
             } else {
-              // Update the record with latest data and state
+              // board has been updated, insert into DB updated state 
               const updatedRecord = {
                 ...latestGameRecord,
                 CurrentTeam: gameState.currentTeam,
@@ -127,6 +131,15 @@ export default function Page({ params }: { params: { gameId: string } }) {
       console.log("gameState.gameId is undefined or empty. Sync not triggered.");
     }
   }, [gameState.gameId]);
+
+  useEffect(() => {
+    if (gameState.gameId) {
+      console.log("Cards Updated Syncing game board with gameId:", gameState.gameId);
+      syncGameBoard(false);
+    } else {
+      console.log("Cards Updated gameState.gameId is undefined or empty. Sync not triggered.");
+    }
+  }, [gameState.redCardsLeft, gameState.blueCardsLeft]);
   
 
   
@@ -170,6 +183,26 @@ export default function Page({ params }: { params: { gameId: string } }) {
     setGameState((prevState) => ({
       ...prevState,
       currentTeam: prevState.currentTeam === "red" ? "blue" : "red",
+    }));
+  }
+
+  function createBoard(words: string[]) {
+    const shuffledWords = shuffleArray(words).slice(0, 25);
+    const cardTypes = shuffleArray([
+      "red", "red", "red", "red", "red", "red", "red", "red", "red",
+      "blue", "blue", "blue", "blue", "blue", "blue", "blue", "blue",
+      "neutral", "neutral", "neutral", "neutral", "neutral", "neutral", "neutral",
+      "assassin",
+    ]);
+
+    setGameState((prevState) => ({
+      ...prevState,
+      cards: shuffledWords.map((word, i) => ({
+        word,
+        type: cardTypes[i],
+        revealed: false,
+        index: i
+      })),
     }));
   }
 
@@ -236,7 +269,7 @@ export default function Page({ params }: { params: { gameId: string } }) {
       </div>
 
       <div className="controls">
-        <button>New Game</button>
+        <button onClick={() => createBoard(words)}>New Game</button>
         <button onClick={endTurn}>End Turn</button>
       </div>
   </main>
