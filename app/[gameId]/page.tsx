@@ -21,6 +21,7 @@ type Card = {
 };
 
 export default function Page({ params }: { params: { gameId: string } }) {
+  //categories is an object that conatins 5 properties 
   const [categories, setCategories] = useState({
     category1: "",
     category2: "",
@@ -28,6 +29,7 @@ export default function Page({ params }: { params: { gameId: string } }) {
     category4: "",
     category5: "",
   });
+
   const [words, setWords] = useState<string[]>([]);
 
   const [gameState, setGameState] = useState<{
@@ -35,6 +37,7 @@ export default function Page({ params }: { params: { gameId: string } }) {
     currentTeam: string;
     redCardsLeft: number;
     blueCardsLeft: number;
+    totalCardsLeft: number,
     categories: [];
     cards: Card[]; // Explicitly typing the cards array
   }>({
@@ -42,6 +45,7 @@ export default function Page({ params }: { params: { gameId: string } }) {
     currentTeam: "red",
     redCardsLeft: 9,
     blueCardsLeft: 8,
+    totalCardsLeft: (Object.values(categories).length * Object.values(categories).length),
     categories: [],
     cards: [], // Initial empty gameID
   });
@@ -76,6 +80,7 @@ export default function Page({ params }: { params: { gameId: string } }) {
                 categories: JSON.parse(latestGameRecord.Categories as string) as [],
                 blueCardsLeft: latestGameRecord.BlueCardsLeft,
                 redCardsLeft: latestGameRecord.RedCardsLeft,
+                totalCardsLeft: latestGameRecord.TotalCardsLeft,
                 cards: JSON.parse(latestGameRecord.Cards as string) as Card[],
               }));
 
@@ -139,7 +144,7 @@ export default function Page({ params }: { params: { gameId: string } }) {
     } else {
       console.log("Cards Updated gameState.gameId is undefined or empty. Sync not triggered.");
     }
-  }, [gameState.redCardsLeft, gameState.blueCardsLeft]);
+  }, [gameState.totalCardsLeft]);
   
 
   
@@ -170,11 +175,13 @@ export default function Page({ params }: { params: { gameId: string } }) {
       setGameState((prevState) => ({
         ...prevState,
         redCardsLeft: prevState.redCardsLeft - 1,
+        totalCardsLeft: prevState.totalCardsLeft -1
       }));
     } else if (type === "blue") {
       setGameState((prevState) => ({
         ...prevState,
         blueCardsLeft: prevState.blueCardsLeft - 1,
+        totalCardsLeft: prevState.totalCardsLeft -1
       }));
     }
   }
@@ -230,9 +237,9 @@ export default function Page({ params }: { params: { gameId: string } }) {
     }));
   }
   
-  // useEffect(() => {
-  //   toggleAllCardsVisibility(spymasterView);
-  // }, [spymasterView]);
+  useEffect(() => {
+    toggleAllCardsVisibility(spymasterView);
+  }, [spymasterView]);
 
   console.log("game state: " + gameState.gameId + " " + gameState.blueCardsLeft);
 

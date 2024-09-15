@@ -37,12 +37,14 @@ export default function App() {
     currentTeam: string;
     redCardsLeft: number;
     blueCardsLeft: number;
+    totalCardsLeft: number,
     cards: Card[]; // Explicitly typing the cards array
   }>({
     gameId: undefined, // Initial empty gameID
     currentTeam: "red",
     redCardsLeft: 9,
     blueCardsLeft: 8,
+    totalCardsLeft: (Object.values(categories).length * Object.values(categories).length),
     cards: [], // Initial empty gameID
   });
 
@@ -152,6 +154,7 @@ export default function App() {
         CurrentTeam: gameState.currentTeam,
         RedCardsLeft: gameState.redCardsLeft,
         BlueCardsLeft: gameState.blueCardsLeft,
+        TotalCardsLeft: gameState.totalCardsLeft,
         Categories: JSON.stringify(words), 
         Cards: JSON.stringify(gameState.cards), 
       });

@@ -65,6 +65,7 @@ const schema = a.schema({
       CurrentTeam: a.string().required(), // Current team (red or blue)
       RedCardsLeft: a.integer().required(), // Number of red cards left
       BlueCardsLeft: a.integer().required(), // Number of blue cards left
+      TotalCardsLeft: a.integer().required(), // Number of total cards left
       Categories: a.json().required(),  // Using JSON to represent the list of categories
       Cards: a.json().required(),       // Using JSON to represent the list of card objects
     })
