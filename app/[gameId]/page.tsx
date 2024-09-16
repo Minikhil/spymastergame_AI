@@ -49,17 +49,68 @@ export default function Page({ params }: { params: { gameId: string } }) {
     categories: [],
     cards: [], // Initial empty gameID
   });
-
-   //init game
-   gameState.gameId = params.gameId;
-
-  const [loading, setLoading] = useState(false);
+  
   const [spymasterView, setSpymasterView] = useState(false);
 
+  //you can pass an empty array as its dependency array. T
+  //This tells React to only run the effect once, after the initial render.
+  useEffect(() => {
+    initGame()
+  }, []);
+  
+  function initGame() {
+    console.log("game state start: " + gameState.gameId);
+    console.log("Intial Fetch Init")
+    gameState.gameId = params.gameId;
+    fetchGameData(gameState.gameId)
+  }
+
+  async function fetchGameDataV2(gameId: String) {
+    const allGames = await dynamoDbClient.models.GameSessions.list();
+    console.log(allGames);
+  }
+
+  async function fetchGameData(gameId: String) {
+    try {
+
+      const { data: gameData, errors } = await dynamoDbClient.models.GameSessions.list({
+        filter: { GameID: { eq:gameId?.trim() } }
+      });
+
+      console.log("fetched cards data: " + gameData[0].Cards)
+  
+      // Check if there were any errors
+      if (errors) {
+        console.error('Errors occurred during query:', errors);
+        throw new Error('Failed to fetch game data.');
+      }
+  
+      // Check if any game data was found
+      if (!gameData || gameData.length === 0) {
+        throw new Error('No game data found for the provided GameID.');
+      }
+
+      const latestGameRecord = gameData[0]
+
+      setGameState((prevState) => ({
+        ...prevState,
+        blueCardsLeft: latestGameRecord.BlueCardsLeft,
+        redCardsLeft: latestGameRecord.RedCardsLeft,
+        totalCardsLeft: latestGameRecord.TotalCardsLeft,
+        categories: JSON.parse(latestGameRecord.Categories as string) as [],
+        cards: JSON.parse(latestGameRecord.Cards as string) as Card[],
+      }));
+  
+      //return gameData[0]; // Return the first matching game session
+    } catch (error) {
+      console.error('Error fetching game data:', error);
+      throw error; // Handle the error
+    }
+  }
+  
   async function syncGameBoard(isFirst: boolean) {
     try {
-      console.log("syncBoard is First? ")
-      console.log(isFirst)
+      console.log("syncBoard is First? " + isFirst)
       
       // Fetch the latest record using observeQuery and filter
       const subscription = dynamoDbClient.models.GameSessions.observeQuery({
@@ -77,10 +128,10 @@ export default function Page({ params }: { params: { gameId: string } }) {
               //first time fetch just grab data from DB
               setGameState((prevState) => ({
                 ...prevState,
-                categories: JSON.parse(latestGameRecord.Categories as string) as [],
                 blueCardsLeft: latestGameRecord.BlueCardsLeft,
                 redCardsLeft: latestGameRecord.RedCardsLeft,
                 totalCardsLeft: latestGameRecord.TotalCardsLeft,
+                categories: JSON.parse(latestGameRecord.Categories as string) as [],
                 cards: JSON.parse(latestGameRecord.Cards as string) as Card[],
               }));
 
@@ -128,23 +179,23 @@ export default function Page({ params }: { params: { gameId: string } }) {
   //   syncGameBoard(true);
   // }, [gameState.gameId]);
 
-  useEffect(() => {
-    if (gameState.gameId) {
-      console.log("Syncing game board with gameId:", gameState.gameId);
-      syncGameBoard(true);
-    } else {
-      console.log("gameState.gameId is undefined or empty. Sync not triggered.");
-    }
-  }, [gameState.gameId]);
+  // useEffect(() => {
+  //   if (gameState.gameId) {
+  //     console.log("Syncing game board with gameId:", gameState.gameId);
+  //     syncGameBoard(true);
+  //   } else {
+  //     console.log("gameState.gameId is undefined or empty. Sync not triggered.");
+  //   }
+  // }, [gameState.gameId]);
 
-  useEffect(() => {
-    if (gameState.gameId) {
-      console.log("Cards Updated Syncing game board with gameId:", gameState.gameId);
-      syncGameBoard(false);
-    } else {
-      console.log("Cards Updated gameState.gameId is undefined or empty. Sync not triggered.");
-    }
-  }, [gameState.totalCardsLeft]);
+  // useEffect(() => {
+  //   if (gameState.gameId) {
+  //     console.log("Cards Updated Syncing game board with gameId:", gameState.gameId);
+  //     syncGameBoard(false);
+  //   } else {
+  //     console.log("Cards Updated gameState.gameId is undefined or empty. Sync not triggered.");
+  //   }
+  // }, [gameState.totalCardsLeft]);
   
 
   
@@ -237,13 +288,13 @@ export default function Page({ params }: { params: { gameId: string } }) {
     }));
   }
   
-  useEffect(() => {
-    toggleAllCardsVisibility(spymasterView);
-  }, [spymasterView]);
+  // useEffect(() => {
+  //   toggleAllCardsVisibility(spymasterView);
+  // }, [spymasterView]);
 
-  console.log("game state: " + gameState.gameId + " " + gameState.blueCardsLeft);
+  console.log("game state end: " + gameState.gameId);
 
-  console.log("cards: " + JSON.stringify(gameState.cards));
+  console.log("cards end: " + JSON.stringify(gameState.cards));
   
   return (
   <main>
