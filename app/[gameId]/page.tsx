@@ -57,11 +57,23 @@ export default function Page({ params }: { params: { gameId: string } }) {
   useEffect(() => {
     initGame()
     // Subscribe to update of GameSessions gameId
+    // Doc: https://docs.amplify.aws/nextjs/build-a-backend/data/subscribe-data/
     const updateSub = dynamoDbClient.models.GameSessions
     .onUpdate({
       filter: {GameID: {eq: params.gameId?.trim()}}
     }).subscribe({
-      next: (data) => console.log("New Data: " + data),
+      next: (data) => {
+        console.log("New Data: " + data.Cards)
+        setGameState((prevState) => ({
+          ...prevState,
+          blueCardsLeft: data.BlueCardsLeft,
+          redCardsLeft: data.RedCardsLeft,
+          totalCardsLeft: data.TotalCardsLeft,
+          categories: JSON.parse(data.Categories as string) as [],
+          cards: JSON.parse(data.Cards as string) as Card[],
+        }));
+
+      },
       error: (error) => console.warn("New Error: " + error),
     });
 
