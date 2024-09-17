@@ -373,7 +373,7 @@ export default function Page({ params }: { params: { gameId: string } }) {
   
   return (
   <main>
-    <div>Code Names Game ID: {params.gameId}</div>
+    <h1>Code Names Game ID: {params.gameId}</h1>
     <div className="category-input">
         <input type="text" id="category1" placeholder="Category 1" value={categories.category1} onChange={handleChange} />
         <input type="text" id="category2" placeholder="Category 2" value={categories.category2} onChange={handleChange} />
@@ -384,16 +384,6 @@ export default function Page({ params }: { params: { gameId: string } }) {
       </div>
 
       {loading && <div id="loading-indicator">Generating words...</div>}
-    <div className="spymaster-toggle">
-        <label>
-          <input
-            type="checkbox"
-            checked={spymasterView}
-            onChange={(e) => setSpymasterView(e.target.checked)}
-          />
-          Spymaster View
-        </label>
-      </div>
 
       <div className="turn-indicator">
         {`${gameState.currentTeam.charAt(0).toUpperCase() + gameState.currentTeam.slice(1)} Team's Turn`}
@@ -419,13 +409,22 @@ export default function Page({ params }: { params: { gameId: string } }) {
         <button onClick={endTurn}>
           End Turn
           </button>
+
+          <label>
+          <input
+            type="checkbox"
+            checked={spymasterView}
+            onChange={(e) => setSpymasterView(e.target.checked)}
+          />
+          Spymaster View
+        </label>
       </div>
       
-      <button type="button" 
+      {/* <button type="button" 
       className = "text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
         Purple to Pink
-        </button>
-        
+        </button> */}
+
   </main>
   );
   

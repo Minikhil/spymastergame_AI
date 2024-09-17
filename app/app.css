@@ -66,12 +66,15 @@
 
   /* code names */
 body {
-    font-family: Arial, sans-serif;
+    /* font-family: Arial, sans-serif; */
+    display: flex;
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* background: white; */
-    background: linear-gradient(180deg, rgb(56, 62, 65), rgb(255, 255, 255));
+    background: rgb(34, 33, 33);
+    color: #ccc;
+    /* background: linear-gradient(180deg, rgb(56, 62, 65), rgb(255, 255, 255)); */
 }
 .game-board {
     display: grid;
@@ -82,7 +85,8 @@ body {
 }
 .card {
     height: 100px;
-    background-color: #fff;
+    background-color: #e8e8e8;;
+    color: black;
     border: 1px solid #ccc;
     display: flex;
     justify-content: center;
@@ -92,11 +96,8 @@ body {
     transition: background-color 0.3s;
 }
 .card:hover {
+  border-width: 3px; 
   border-color: #646cff;
-}
-.card:focus,
-.card:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
 }
 
 .card.red { background-color: #ffcccb; }
@@ -131,10 +132,10 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #eee;;
   cursor: pointer;
   transition: border-color 0.25s;
-  color: white;
+  margin: 10px; /* Adds space between buttons */
 }
 button:hover {
   border-color: #646cff;

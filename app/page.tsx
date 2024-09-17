@@ -187,7 +187,7 @@ export default function App() {
 
   return (
     <main>
-      <h2>Codenames AI Game</h2>
+      <h1>Codenames AI Game</h1>
       <div className="game-id-input">
         <input
           type="text"
