@@ -21,6 +21,8 @@ type Card = {
 };
 
 export default function Page({ params }: { params: { gameId: string } }) {
+
+  const [loading, setLoading] = useState(false);
   //categories is an object that conatins 5 properties 
   const [categories, setCategories] = useState({
     category1: "",
@@ -132,7 +134,7 @@ export default function Page({ params }: { params: { gameId: string } }) {
       throw error; // Handle the error
     }
   }
-    
+
   function revealCard(index: number) {
     const newCards = [...gameState.cards];
     //card is reference not a copy 
@@ -216,7 +218,7 @@ export default function Page({ params }: { params: { gameId: string } }) {
     }));
   }
 
-  function createBoard(words: string[]) {
+  function createBoard(words: string[]): Card[] {
     const shuffledWords = shuffleArray(words).slice(0, 25);
     const cardTypes = shuffleArray([
       "red", "red", "red", "red", "red", "red", "red", "red", "red",
@@ -225,15 +227,43 @@ export default function Page({ params }: { params: { gameId: string } }) {
       "assassin",
     ]);
 
+    const newCards = shuffledWords.map((word, i) => ({
+      word,
+      type: cardTypes[i],
+      revealed: false,
+    }));
+
+    console.log("Words Updated:", words);
+    console.log("shuffledWords:", shuffledWords);
+    console.log("Cards Updated:", newCards);
+
+    return newCards;
+  }
+
+  //words need to be all the words on board (25 of them )
+  function shuffleBoard(words: string[]) {
+    let shuffledCards;
+    if (words.length === 0) { 
+      console.log("Shuffle Board words is empty: " + words)
+      //set words 
+      const newWords: string[] = [];
+      gameState.cards.forEach((card) => {
+        newWords.push(card.word); // Assuming 'word' property exists in Card object
+      });
+
+      setWords(newWords);
+      shuffledCards = createBoard(newWords)
+    } else {
+      shuffledCards = createBoard(words)
+    }
+
+    console.log("Shuffle Board with: " + shuffledCards)
+
     setGameState((prevState) => ({
       ...prevState,
-      cards: shuffledWords.map((word, i) => ({
-        word,
-        type: cardTypes[i],
-        revealed: false,
-        index: i
-      })),
+      cards: shuffledCards
     }));
+    toggleAllCardsVisibility(spymasterView)
   }
 
   function shuffleArray(array: any[]) {
@@ -267,10 +297,93 @@ export default function Page({ params }: { params: { gameId: string } }) {
   console.log("game state end: " + gameState.gameId);
 
   console.log("cards end: " + JSON.stringify(gameState.cards));
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setCategories((prevCategories) => ({
+      ...prevCategories,
+      [id]: value,
+    }));
+  };
+
+  async function handleGenerateWords() {
+    if (gameState.gameId === undefined) {
+      alert("Please enter game ID.");
+      return;
+    }
+
+    const categoryValues = Object.values(categories).filter((cat) => cat.trim() !== "");
+  
+    if (categoryValues.length < 5) {
+      alert("Please enter all 5 categories.");
+      return;
+    }
+  
+    setLoading(true);
+  
+    try {
+      const response = await fetch("/api/openai", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ categories: categoryValues }),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to fetch words");
+      }
+  
+      const generatedWords = await response.json();
+      const parsedWords = JSON.parse(generatedWords);
+  
+      if (Array.isArray(parsedWords)) {
+        const flatWords = parsedWords.flat();
+        setWords(flatWords);
+        console.log("Words: " + words)
+        const newCards = createBoard(flatWords);
+        
+         // Update the state and then insert into DynamoDB
+         setGameState(prevState => {
+          //update state 
+          const updatedState = {
+            ...prevState,
+            cards: newCards,
+            categories: categoryValues as [],
+            totalCardsLeft: 25,
+            redCardsLeft: 9,
+            blueCardsLeft: 8,
+          };
+          
+          // Pass updated state to Insert into DynamoDB
+          updateGameSession(updatedState);
+          
+          return updatedState;
+        });
+      } else {
+        throw new Error("Invalid format of generated words");
+      }
+    } catch (error) {
+      console.error("Error generating words:", error);
+      alert("There was an error generating words. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  }
   
   return (
   <main>
     <div>Code Names Game ID: {params.gameId}</div>
+    <div className="category-input">
+        <input type="text" id="category1" placeholder="Category 1" value={categories.category1} onChange={handleChange} />
+        <input type="text" id="category2" placeholder="Category 2" value={categories.category2} onChange={handleChange} />
+        <input type="text" id="category3" placeholder="Category 3" value={categories.category3} onChange={handleChange} />
+        <input type="text" id="category4" placeholder="Category 4" value={categories.category4} onChange={handleChange} />
+        <input type="text" id="category5" placeholder="Category 5" value={categories.category5} onChange={handleChange} />
+        <button onClick={handleGenerateWords}>Generate Words</button>
+      </div>
+
+      {loading && <div id="loading-indicator">Generating words...</div>}
     <div className="spymaster-toggle">
         <label>
           <input
@@ -299,7 +412,7 @@ export default function Page({ params }: { params: { gameId: string } }) {
       </div>
 
       <div className="controls">
-        <button onClick={() => createBoard(words)}>New Game</button>
+        <button onClick={() => shuffleBoard(words)}>New Code</button>
         <button onClick={endTurn}>End Turn</button>
       </div>
   </main>
