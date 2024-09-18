@@ -30,6 +30,7 @@ export default function App() {
   });
   const [words, setWords] = useState<string[]>([]);
 
+  //setGameState is function which updates gameState and returns of type gameState 
   const [gameState, setGameState] = useState<{
     gameId: string | undefined;
     currentTeam: string;
@@ -99,23 +100,38 @@ export default function App() {
         const flatWords = parsedWords.flat();
         setWords(flatWords);
         const newCards = createBoard(flatWords);
-        
-        // Update the state and then insert into DynamoDB
-        setGameState(prevState => {
-          //update state 
-          const updatedState = {
-            ...prevState,
-            cards: newCards,
-            totalCardsLeft: 25,
-            redCardsLeft: 9,
-            blueCardsLeft: 8,
-          };
-          
-          // Pass updated state to Insert into DynamoDB
-          insertNewGameToDynamo(updatedState);
-          
-          return updatedState;
+  
+        /**
+         * Wrap the state update in a Promise to ensure it gets completed. This is needed 
+           because Reacts setState function are async so once we update it it may not reflect right away 
+           since we are passing it to insertNewGameToDynamo we need to wait to ensure updated value is being passed 
+         */
+        const updatedState = await new Promise<typeof gameState>((resolve) => {
+
+          // Update gameState and return 
+          setGameState(prevState => {
+            const updatedState = {
+              ...prevState,
+              cards: newCards,
+              totalCardsLeft: 25,
+              redCardsLeft: 9,
+              blueCardsLeft: 8,
+            };
+
+            //resolve the promise 
+            resolve(updatedState);
+
+            //React expects the function to return the new state value when using functional setState
+            return updatedState;
+          });
+
         });
+        
+        // Promise resolved, insert into DynamoDB and wait for it to complete before routing 
+        await insertNewGameToDynamo(updatedState);
+        
+        console.log("ROUTING!");
+        router.push(`/${gameState.gameId}`);
       } else {
         throw new Error("Invalid format of generated words");
       }
@@ -124,7 +140,6 @@ export default function App() {
       alert("There was an error generating words. Please try again.");
     } finally {
       setLoading(false);
-      router.push(`/${gameState.gameId}`);
     }
   }
 
@@ -204,10 +219,10 @@ export default function App() {
         <input type="text" id="category3" placeholder="Category 3" value={categories.category3} onChange={handleChange} />
         <input type="text" id="category4" placeholder="Category 4" value={categories.category4} onChange={handleChange} />
         <input type="text" id="category5" placeholder="Category 5" value={categories.category5} onChange={handleChange} />
-        <button onClick={handleGenerateWords}>Generate Words</button>
+        <button onClick={handleGenerateWords}>Start</button>
       </div>
 
-      {loading && <div id="loading-indicator">Generating words...</div>}
+      {loading && <div className= "loading" id="loading-indicator">Creating Game...</div>}
     </main>
   );
 }
