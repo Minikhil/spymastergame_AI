@@ -3,11 +3,15 @@
 import { useState, useEffect } from "react";
 import { generateClient } from "aws-amplify/data";
 import type { GameSessionsSchema } from "@/amplify/data/resource";
+import { Loader, Button } from '@aws-amplify/ui-react';
 import { useRouter } from 'next/navigation'
 import "./../app/app.css";
 import { Amplify } from "aws-amplify";
 import outputs from "@/amplify_outputs.json";
 import "@aws-amplify/ui-react/styles.css";
+import {LoaderComponent} from "./components/loader";
+import Page from "./[gameId]/page";
+import { pages } from "next/dist/build/templates/app-page";
 
 Amplify.configure(outputs);
 
@@ -219,10 +223,10 @@ export default function App() {
         <input type="text" id="category3" placeholder="Category 3" value={categories.category3} onChange={handleChange} />
         <input type="text" id="category4" placeholder="Category 4" value={categories.category4} onChange={handleChange} />
         <input type="text" id="category5" placeholder="Category 5" value={categories.category5} onChange={handleChange} />
-        <button onClick={handleGenerateWords}>Start</button>
+        <Button variation="primary" colorTheme="success" onClick={handleGenerateWords}>Start</Button>
       </div>
 
-      {loading && <div className= "loading" id="loading-indicator">Creating Game...</div>}
+      {loading &&  <LoaderComponent />}
     </main>
   );
 }
