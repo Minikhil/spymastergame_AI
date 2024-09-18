@@ -76,12 +76,20 @@ body {
     color: #ccc;
     /* background: linear-gradient(180deg, rgb(56, 62, 65), rgb(255, 255, 255)); */
 }
-.game-board {
+/* .game-board {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     column-gap: 10px;
     row-gap: 10px;
     margin: 20px;
+} */
+.game-board {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  max-width: 65vw; /* 80% of the viewport width */
+  /* max-height: 65vh; 80% of the viewport height */
+  margin: 0 auto;
 }
 .card {
     height: 100px;
