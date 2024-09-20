@@ -123,6 +123,16 @@ body {
     font-weight: bold;
     margin-bottom: 10px;
 }
+.score-board {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+.redCardsLeft {
+  color: rgb(223, 60, 60);
+}
+.blueCardsLeft {
+  color: rgb(33, 33, 228);
+}
 .category-input input {
     width: 200px;
     margin: 5px;

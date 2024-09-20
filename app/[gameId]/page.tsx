@@ -65,7 +65,8 @@ export default function Page({ params }: { params: { gameId: string } }) {
       filter: {GameID: {eq: params.gameId?.trim()}}
     }).subscribe({
       next: (data) => {
-        console.log("New Data: " + data.Cards)
+        //console.log("New Data: " + data.Cards)
+        console.log("New Score Red: " + data.RedCardsLeft + "Blue: " + data.BlueCardsLeft)
         setGameState((prevState) => ({
           ...prevState,
           blueCardsLeft: data.BlueCardsLeft,
@@ -146,19 +147,26 @@ export default function Page({ params }: { params: { gameId: string } }) {
       card.revealed = true;
       if (card.type === "assassin") {
         endGame(gameState.currentTeam === "red" ? "blue" : "red");
-      } else {
-        updateCardCount(card.type);
       }
     }
 
-    //update cards 
-    setGameState((prevState) => ({
-      ...prevState,
-      cards: newCards,
-    }));
-
-    //insert into
-    updateGameSession(gameState);
+      // Update the state and then insert into DynamoDB
+      setGameState(prevState => {
+        //update state 
+        const updatedState = {
+          ...prevState,
+          cards: newCards,
+          blueCardsLeft: card.type === "blue" ? prevState.blueCardsLeft - 1 : prevState.blueCardsLeft,
+          redCardsLeft: card.type === "red" ? prevState.redCardsLeft - 1 : prevState.redCardsLeft,
+          totalCardsLeft: prevState.totalCardsLeft - 1
+        };
+        
+        // Pass updated state to Insert into DynamoDB
+        updateGameSession(updatedState);
+        
+        // return to set the gameState 
+        return updatedState;
+      });
   }
 
   async function updateGameSession(updatedGameState: typeof gameState) {
@@ -193,22 +201,6 @@ export default function Page({ params }: { params: { gameId: string } }) {
       console.error("Error updating game record in DynamoDB:", error);
       alert("There was an error saving the game. Please try again.");
     } 
-  }
-
-  function updateCardCount(type: string) {
-    if (type === "red") {
-      setGameState((prevState) => ({
-        ...prevState,
-        redCardsLeft: prevState.redCardsLeft - 1,
-        totalCardsLeft: prevState.totalCardsLeft -1
-      }));
-    } else if (type === "blue") {
-      setGameState((prevState) => ({
-        ...prevState,
-        blueCardsLeft: prevState.blueCardsLeft - 1,
-        totalCardsLeft: prevState.totalCardsLeft -1
-      }));
-    }
   }
   
   function endTurn() {
@@ -294,9 +286,9 @@ export default function Page({ params }: { params: { gameId: string } }) {
     toggleAllCardsVisibility(spymasterView);
   }, [spymasterView]);
 
-  console.log("game state end: " + gameState.gameId);
+  // console.log("game state end: " + gameState.gameId);
 
-  console.log("cards end: " + JSON.stringify(gameState.cards));
+  // console.log("cards end: " + JSON.stringify(gameState.cards));
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -387,6 +379,11 @@ export default function Page({ params }: { params: { gameId: string } }) {
 
       <div className="turn-indicator">
         {`${gameState.currentTeam.charAt(0).toUpperCase() + gameState.currentTeam.slice(1)} Team's Turn`}
+      </div>
+
+      <div className="score-board">
+       <span className="redCardsLeft"> {`${gameState.redCardsLeft} -`} </span>
+       <span className="blueCardsLeft"> {`${gameState.blueCardsLeft}`} </span>
       </div>
 
       <div className="game-board">
