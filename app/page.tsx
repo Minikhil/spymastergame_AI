@@ -92,31 +92,31 @@ export default function App() {
     return newArray;
   }
 
-  async function insertNewGameToDynamo(updatedState: typeof gameState) {
-    if (!updatedState.gameId) {
-      alert("Please enter a game ID.");
-      return;
-    }
+  // async function insertNewGameToDynamo(updatedState: typeof gameState) {
+  //   if (!updatedState.gameId) {
+  //     alert("Please enter a game ID.");
+  //     return;
+  //   }
   
-    try {
-      console.log("Game State:", updatedState);
-      console.log("Insert Cards:", updatedState.cards);
-      await dynamoDbClient.models.GameSessions.create({
-        GameID: updatedState.gameId,
-        CurrentTeam: updatedState.currentTeam,
-        RedCardsLeft: updatedState.redCardsLeft,
-        BlueCardsLeft: updatedState.blueCardsLeft,
-        TotalCardsLeft: updatedState.totalCardsLeft,
-        Categories: JSON.stringify(categories), 
-        Cards: JSON.stringify(updatedState.cards), 
-      });
+  //   try {
+  //     console.log("Game State:", updatedState);
+  //     console.log("Insert Cards:", updatedState.cards);
+  //     await dynamoDbClient.models.GameSessions.create({
+  //       GameID: updatedState.gameId,
+  //       CurrentTeam: updatedState.currentTeam,
+  //       RedCardsLeft: updatedState.redCardsLeft,
+  //       BlueCardsLeft: updatedState.blueCardsLeft,
+  //       TotalCardsLeft: updatedState.totalCardsLeft,
+  //       Categories: JSON.stringify(categories), 
+  //       Cards: JSON.stringify(updatedState.cards), 
+  //     });
   
-      console.log("New game record created successfully in DynamoDB");
-    } catch (error) {
-      console.error("Error creating game record in DynamoDB:", error);
-      alert("There was an error saving the game. Please try again.");
-    }
-  }
+  //     console.log("New game record created successfully in DynamoDB");
+  //   } catch (error) {
+  //     console.error("Error creating game record in DynamoDB:", error);
+  //     alert("There was an error saving the game. Please try again.");
+  //   }
+  // }
 
   return (
     <main>
