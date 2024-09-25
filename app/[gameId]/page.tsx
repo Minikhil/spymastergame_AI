@@ -8,17 +8,12 @@ import "../app.css";
 import { Amplify } from "aws-amplify";
 import outputs from "@/amplify_outputs.json";
 import "@aws-amplify/ui-react/styles.css";
+import {Card} from "../types"
 
 Amplify.configure(outputs);
 
 
 const dynamoDbClient = generateClient<GameSessionsSchema>();
-
-type Card = {
-  word: string;
-  type: string; // 'red', 'blue', 'neutral', or 'assassin'
-  revealed: boolean;
-};
 
 export default function Page({ params }: { params: { gameId: string } }) {
 
