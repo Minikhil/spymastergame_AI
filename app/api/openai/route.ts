@@ -1,6 +1,5 @@
 
 import { NextResponse } from 'next/server';
-import { secret } from '@aws-amplify/backend';
 
 //https://docs.amplify.aws/react/deploy-and-host/fullstack-branching/secrets-and-vars/
 
@@ -35,7 +34,12 @@ export async function POST(request: Request) {
 
   const apiUrl = 'https://api.openai.com/v1/chat/completions';
 
-  const prompt = `Generate 5 single words for each of the following categories, suitable for a game of Codenames. The words should be related to their category but not too obvious. Categories: ${categories.join(', ')}. Format the response as a JSON array of arrays.`;
+  const prompt = `Act as an expert code names game creator. 
+  Give me 25 words to be used in a game of code names where there are 3 words for each of the following categories so that makes up 15 words, 
+  for the remaining 10 words give me any random words. The  15 words should be related to their category but not too obvious.
+  The words should be common words which are widely known by everyone.
+  Categories: ${categories.join(', ')}. Format the response as a JSON array of arrays. 
+  Please make sure all the words are good words to be used for a game of codenames where spymasters can give clues connecting more than one word`;
 
   try {
     const response = await fetch(apiUrl, {
