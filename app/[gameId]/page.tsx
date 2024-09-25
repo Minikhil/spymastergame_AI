@@ -1,7 +1,7 @@
 "use client";
 
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { generateClient } from "aws-amplify/data";
 import type { GameSessionsSchema } from "@/amplify/data/resource";
 import "../app.css";
@@ -48,6 +48,7 @@ export default function Page({ params }: { params: { gameId: string } }) {
   });
   
   const [spymasterView, setSpymasterView] = useState(false);
+  const spymasterViewRef = useRef(spymasterView);
 
   //you can pass an empty array as its dependency array. T
   //This tells React to only run the effect once, after the initial render.
@@ -60,16 +61,36 @@ export default function Page({ params }: { params: { gameId: string } }) {
       filter: {GameID: {eq: params.gameId?.trim()}}
     }).subscribe({
       next: (data) => {
-        //console.log("New Data: " + data.Cards)
-        console.log("New Score Red: " + data.RedCardsLeft + "Blue: " + data.BlueCardsLeft)
-        setGameState((prevState) => ({
-          ...prevState,
-          blueCardsLeft: data.BlueCardsLeft,
-          redCardsLeft: data.RedCardsLeft,
-          totalCardsLeft: data.TotalCardsLeft,
-          categories: JSON.parse(data.Categories as string) as [],
-          cards: JSON.parse(data.Cards as string) as Card[],
-        }));
+        console.log("New Score Red: " + data.RedCardsLeft + "Blue: " + data.BlueCardsLeft +
+           " spyMasterView" + spymasterViewRef.current)
+        /**
+         * Avoiding Stale Closures in Effects
+         * refs can be used to access the most recent value of a state or prop inside an effect
+         *  or callback that might have captured an old value due to closures.
+         */
+        if (spymasterViewRef.current) {
+          console.log("New Data: SPY " + data.Cards)
+          setGameState((prevState) => ({
+            ...prevState,
+            blueCardsLeft: data.BlueCardsLeft,
+            redCardsLeft: data.RedCardsLeft,
+            totalCardsLeft: data.TotalCardsLeft,
+            categories: JSON.parse(data.Categories as string) as [],
+          }));
+        } else {
+          console.log("New Data: " + data.Cards)
+          setGameState((prevState) => ({
+
+            ...prevState,
+            blueCardsLeft: data.BlueCardsLeft,
+            redCardsLeft: data.RedCardsLeft,
+            totalCardsLeft: data.TotalCardsLeft,
+            categories: JSON.parse(data.Categories as string) as [],
+            cards: JSON.parse(data.Cards as string) as Card[],
+          }));
+
+        }
+        
 
       },
       error: (error) => console.warn("New Error: " + error),
@@ -264,7 +285,11 @@ export default function Page({ params }: { params: { gameId: string } }) {
   
   function endGame(winner: string) {
     alert(`${winner.charAt(0).toUpperCase() + winner.slice(1)} team wins!`);
-    //createBoard(words); // Reset board
+    toggleAllCardsVisibility(true) //once game ends reveal board
+  }
+
+  function spyMaster() {
+   setSpymasterView(!spymasterView)
   }
 
   function toggleAllCardsVisibility(reveal: boolean) {
@@ -278,6 +303,8 @@ export default function Page({ params }: { params: { gameId: string } }) {
   }
   
   useEffect(() => {
+    spymasterViewRef.current = spymasterView;
+    console.log("spy master value: " + spymasterViewRef.current)
     toggleAllCardsVisibility(spymasterView);
   }, [spymasterView]);
 
@@ -402,14 +429,10 @@ export default function Page({ params }: { params: { gameId: string } }) {
           End Turn
           </button>
 
-          <label>
-          <input
-            type="checkbox"
-            checked={spymasterView}
-            onChange={(e) => setSpymasterView(e.target.checked)}
-          />
-          Spymaster View
-        </label>
+          <button onClick={spyMaster}>
+          Spy Master
+          </button>
+
       </div>
       
       {/* <button type="button" 
