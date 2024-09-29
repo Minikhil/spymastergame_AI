@@ -48,6 +48,7 @@ export default function Page({ params }: { params: { gameId: string } }) {
   });
   
   const [spymasterView, setSpymasterView] = useState(false);
+  //Updates to ref will not re-render UI components 
   const spymasterViewRef = useRef(spymasterView);
 
   //you can pass an empty array as its dependency array. T
@@ -63,34 +64,16 @@ export default function Page({ params }: { params: { gameId: string } }) {
       next: (data) => {
         console.log("New Score Red: " + data.RedCardsLeft + "Blue: " + data.BlueCardsLeft +
            " spyMasterView" + spymasterViewRef.current)
-        /**
-         * Avoiding Stale Closures in Effects
-         * refs can be used to access the most recent value of a state or prop inside an effect
-         *  or callback that might have captured an old value due to closures.
-         */
-        if (spymasterViewRef.current) {
-          console.log("New Data: SPY " + data.Cards)
-          setGameState((prevState) => ({
-            ...prevState,
-            blueCardsLeft: data.BlueCardsLeft,
-            redCardsLeft: data.RedCardsLeft,
-            totalCardsLeft: data.TotalCardsLeft,
-            categories: JSON.parse(data.Categories as string) as [],
-          }));
-        } else {
-          console.log("New Data: " + data.Cards)
-          setGameState((prevState) => ({
-
-            ...prevState,
-            blueCardsLeft: data.BlueCardsLeft,
-            redCardsLeft: data.RedCardsLeft,
-            totalCardsLeft: data.TotalCardsLeft,
-            categories: JSON.parse(data.Categories as string) as [],
-            cards: JSON.parse(data.Cards as string) as Card[],
-          }));
-
-        }
         
+        setGameState((prevState) => ({
+
+        ...prevState,
+        blueCardsLeft: data.BlueCardsLeft,
+        redCardsLeft: data.RedCardsLeft,
+        totalCardsLeft: data.TotalCardsLeft,
+        categories: JSON.parse(data.Categories as string) as [],
+        cards: JSON.parse(data.Cards as string) as Card[],
+      }));
 
       },
       error: (error) => console.warn("New Error: " + error),
@@ -153,6 +136,10 @@ export default function Page({ params }: { params: { gameId: string } }) {
   }
 
   function revealCard(index: number) {
+    if (spymasterViewRef.current) {
+      console.log("REVEAL DISABLED FOR SPY MASTER")
+      return
+    }
     const newCards = [...gameState.cards];
     //card is reference not a copy 
     //This means modifying card will also modify the object within the newCards array.
@@ -302,10 +289,10 @@ export default function Page({ params }: { params: { gameId: string } }) {
     }));
   }
   
+  //ToDo: [cleanup] this effect is no longer being used 
   useEffect(() => {
     spymasterViewRef.current = spymasterView;
     console.log("spy master value: " + spymasterViewRef.current)
-    toggleAllCardsVisibility(spymasterView);
   }, [spymasterView]);
 
   // console.log("game state end: " + gameState.gameId);
@@ -412,7 +399,7 @@ export default function Page({ params }: { params: { gameId: string } }) {
         {gameState.cards.map((card, i) => (
           <div
             key={i}
-            className={`card ${card.revealed ? card.type : ""}`}
+            className={`card ${card.revealed ? card.type : (spymasterView ? card.type + ' hidden' : '')}`}
             onClick={() => revealCard(i)}
           >
             {card.word}
@@ -434,13 +421,6 @@ export default function Page({ params }: { params: { gameId: string } }) {
           </button>
 
       </div>
-      
-      {/* <button type="button" 
-      className = "text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-        Purple to Pink
-        </button> */}
-
   </main>
   );
-  
-  }
+}
