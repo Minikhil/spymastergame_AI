@@ -93,7 +93,7 @@ body {
 }
 .card {
     height: 70px;
-    background-color: #e8e8e8;;
+    background-color: #e8e8e8;
     color: black;
     border: 1px solid #ccc;
     display: flex;
@@ -109,8 +109,11 @@ body {
 }
 
 .card.red { background-color: #ffcccb; }
+.card.red.hidden { background-color: #e8e8e8; color: rgb(223, 60, 60);}
 .card.blue { background-color: #cce5ff; }
+.card.blue.hidden { background-color: #e8e8e8; color: rgb(33, 33, 228); }
 .card.neutral { background-color: #f5f5dc; }
+.card.neutral.hidden { background-color: #e8e8e8; color: black; }
 .card.assassin { background-color: #2f4f4f; color: white; }
 .controls, .category-input {
     margin: 20px;
