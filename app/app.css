@@ -76,6 +76,16 @@ body {
     color: #ccc;
     /* background: linear-gradient(180deg, rgb(56, 62, 65), rgb(255, 255, 255)); */
 }
+  a {
+    font-weight: 800;
+    text-decoration: none;
+    color: #ccc;
+  } 
+  main {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
 /* .game-board {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -115,20 +125,24 @@ body {
 .card.neutral { background-color: #f5f5dc; }
 .card.neutral.hidden { background-color: #e8e8e8; color: black; }
 .card.assassin { background-color: #2f4f4f; color: white; }
+  /* Controls and other UI elements */
 .controls, .category-input {
-    margin: 20px;
+  width: 100%;
+  text-align: center; /* Center-align the controls */
+  margin: 20px auto; /* Ensure there's spacing around the controls */
 }
 .spymaster-toggle {
     margin-bottom: 10px;
 }
 .turn-indicator {
-    font-size: 1.2em;
+    font-size: 1.0em;
     font-weight: bold;
     margin-bottom: 10px;
 }
 .score-board {
-  font-size: 1.2em;
+  font-size: 1.0em;
   font-weight: bold;
+  text-align: center;
 }
 .redCardsLeft {
   color: rgb(223, 60, 60);
@@ -137,7 +151,7 @@ body {
   color: rgb(33, 33, 228);
 }
 .category-input input {
-    width: 200px;
+    width: 150px;
     margin: 5px;
 }
 .loading {
