@@ -5,9 +5,14 @@ import { useState, useEffect, useRef } from "react";
 import { generateClient } from "aws-amplify/data";
 import type { GameSessionsSchema } from "@/amplify/data/resource";
 import "../app.css";
+import { Loader, Button, Flex, Input } from '@aws-amplify/ui-react';
 import { Amplify } from "aws-amplify";
+import { useRouter } from 'next/navigation'
 import outputs from "@/amplify_outputs.json";
 import "@aws-amplify/ui-react/styles.css";
+import "../../app/app.css";
+import {LoaderComponent} from "../components/LoaderComponent";
+import {GameSessionLink} from "../components/GameSessionLink";
 import {Card} from "../types"
 
 Amplify.configure(outputs);
@@ -16,6 +21,17 @@ Amplify.configure(outputs);
 const dynamoDbClient = generateClient<GameSessionsSchema>();
 
 export default function Page({ params }: { params: { gameId: string } }) {
+
+  const router = useRouter();
+
+  const [fullUrl, setFullUrl] = useState('');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // Full URL, including domain
+      setFullUrl(window.location.href);
+    }
+  }, [router]);
 
   const [loading, setLoading] = useState(false);
   //categories is an object that conatins 5 properties 
@@ -337,11 +353,11 @@ export default function Page({ params }: { params: { gameId: string } }) {
   
       const generatedWords = await response.json();
       const parsedWords = JSON.parse(generatedWords);
+      console.log("Words from OpenAI: " + parsedWords)
   
       if (Array.isArray(parsedWords)) {
         const flatWords = parsedWords.flat();
         setWords(flatWords);
-        console.log("Words: " + words)
         const newCards = createBoard(flatWords);
         
          // Update the state and then insert into DynamoDB
@@ -374,23 +390,28 @@ export default function Page({ params }: { params: { gameId: string } }) {
   
   return (
   <main>
-    <h1>Code Names Game ID: {params.gameId}</h1>
+    <h1>Code Names AI </h1>
+    <div>
+      <p>
+        Send this link to friends:{" "}
+        <a href= {fullUrl} target="_blank" rel="noopener noreferrer">
+          {fullUrl}
+        </a>
+      </p>
+    </div>
     <div className="category-input">
         <input type="text" id="category1" placeholder="Category 1" value={categories.category1} onChange={handleChange} />
         <input type="text" id="category2" placeholder="Category 2" value={categories.category2} onChange={handleChange} />
         <input type="text" id="category3" placeholder="Category 3" value={categories.category3} onChange={handleChange} />
         <input type="text" id="category4" placeholder="Category 4" value={categories.category4} onChange={handleChange} />
         <input type="text" id="category5" placeholder="Category 5" value={categories.category5} onChange={handleChange} />
-        <button onClick={handleGenerateWords}>Generate Words</button>
+        <Button variation="primary" colorTheme="success" onClick={handleGenerateWords}>Start</Button>
       </div>
 
-      {loading && <div id="loading-indicator">Generating words...</div>}
-
-      <div className="turn-indicator">
-        {`${gameState.currentTeam.charAt(0).toUpperCase() + gameState.currentTeam.slice(1)} Team's Turn`}
-      </div>
+      {loading &&  <LoaderComponent />}
 
       <div className="score-board">
+       <span className="turn-indicator"> {`${gameState.currentTeam.charAt(0).toUpperCase() + gameState.currentTeam.slice(1)} Team's Turn: `} </span>
        <span className="redCardsLeft"> {`${gameState.redCardsLeft} -`} </span>
        <span className="blueCardsLeft"> {`${gameState.blueCardsLeft}`} </span>
       </div>
@@ -408,10 +429,12 @@ export default function Page({ params }: { params: { gameId: string } }) {
       </div>
 
       <div className="controls">
-        <button onClick={() => shuffleBoard(words)}
-        >New Code
-        </button>
-
+        {
+        spymasterView && (<button onClick={() => shuffleBoard(words)}>
+          New Code
+        </button>)
+        }
+        
         <button onClick={endTurn}>
           End Turn
           </button>
