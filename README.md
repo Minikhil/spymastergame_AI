@@ -2,7 +2,7 @@
 
 Spymastergame AI implements a web app for generating and displaying boards for the <a href="https://en.wikipedia.org/wiki/Codenames_(board_game)">Codenames</a> board game. Generated boards are shareable and will update as words are revealed. The board can be viewed either as a spymaster or an ordinary player.
 
-A hosted version of the app is available at [temp](https://development.d17hagtvkaouoc.amplifyapp.com/).
+A hosted version of the app is available at [spymastergame.ai](https://development.d17hagtvkaouoc.amplifyapp.com/).
 
 ![Spymaster view of board](./app/images/spymasterview.png)
 
