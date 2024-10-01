@@ -191,3 +191,73 @@ button:focus-visible {
     padding: 6px 12px;
   }
 }
+
+/* For iPhone 15 Pro and similar devices in portrait mode */
+@media only screen 
+  and (min-device-width: 390px) 
+  and (max-device-width: 844px) 
+  and (orientation: portrait) 
+  and (-webkit-min-device-pixel-ratio: 3) {
+  
+  /* Adjustments for better mobile responsiveness in portrait mode */
+  body {
+    font-size: 16px;
+    padding: 10px;
+  }
+  
+  .game-board {
+    max-width: 90vw;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+  }
+
+  .card {
+    height: 60px;
+    font-size: 14px;
+  }
+
+  .category-input input {
+    width: 100%;
+    margin: 10px 0;
+  }
+
+  .controls button {
+    width: 100%;
+    margin-top: 10px;
+  }
+}
+
+/* For iPhone 15 Pro and similar devices in landscape mode */
+@media only screen 
+  and (min-device-width: 844px) 
+  and (max-device-width: 390px) 
+  and (orientation: landscape) 
+  and (-webkit-min-device-pixel-ratio: 3) {
+  
+  /* Adjustments for landscape mode */
+  body {
+    font-size: 14px; /* Slightly smaller font size for better fitting */
+    padding: 20px;
+  }
+
+  .game-board {
+    max-width: 85vw; /* Slightly narrower grid in landscape */
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px; /* Reduce gap for tighter layout */
+  }
+
+  .card {
+    height: 50px; /* Reduce card height in landscape */
+    font-size: 12px; /* Adjust font size in cards */
+  }
+
+  .category-input input {
+    width: 30%; /* Make inputs smaller to fit better on a horizontal screen */
+    margin: 5px;
+  }
+
+  .controls button {
+    width: auto; /* Ensure buttons fit in the available space */
+    margin: 5px;
+  }
+}
