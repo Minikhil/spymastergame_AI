@@ -1,16 +1,10 @@
-## AWS Amplify Next.js (App Router) Starter Template
+# Spymastergame AI
 
-This repository provides a starter template for creating applications using Next.js (App Router) and AWS Amplify, emphasizing easy setup for authentication, API, and database capabilities.
+Spymastergame AI implements a web app for generating and displaying boards for the <a href="https://en.wikipedia.org/wiki/Codenames_(board_game)">Codenames</a> board game. Generated boards are shareable and will update as words are revealed. The board can be viewed either as a spymaster or an ordinary player.
 
-## Overview
+A hosted version of the app is available at [temp](https://development.d17hagtvkaouoc.amplifyapp.com/).
 
-This template equips you with a foundational Next.js application integrated with AWS Amplify, streamlined for scalability and performance. It is ideal for developers looking to jumpstart their project with pre-configured AWS services like Cognito, AppSync, and DynamoDB.
-
-## Features
-
-- **Authentication**: Setup with Amazon Cognito for secure user authentication.
-- **API**: Ready-to-use GraphQL endpoint with AWS AppSync.
-- **Database**: Real-time database powered by Amazon DynamoDB.
+![Spymaster view of board](./app/images/spymasterview.png)
 
 ## Deploying to AWS
 
