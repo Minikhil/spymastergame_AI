@@ -2,6 +2,8 @@
 
 Spymastergame AI is an innovative web application that generates and displays customizable boards for the popular board game [Codenames](https://en.wikipedia.org/wiki/Codenames_(board_game)). Our unique approach sets us apart from other online Codenames apps by allowing users to input five categories, which are then used to construct the game board with relevant words.
 
+![Spymaster view of board](./app/images/spymasterview.png)
+
 ## Key Features
 
 - **Category-based Board Generation**: Users can enter 5 categories of their choice, making each game more engaging and personalized.
