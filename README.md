@@ -1,14 +1,31 @@
 # Spymastergame AI
 
-Spymastergame AI implements a web app for generating and displaying boards for the <a href="https://en.wikipedia.org/wiki/Codenames_(board_game)">Codenames</a> board game. Generated boards are shareable and will update as words are revealed. The board can be viewed either as a spymaster or an ordinary player.
+Spymastergame AI is an innovative web application that generates and displays customizable boards for the popular board game [Codenames](https://en.wikipedia.org/wiki/Codenames_(board_game)). Our unique approach sets us apart from other online Codenames apps by allowing users to input five categories, which are then used to construct the game board with relevant words.
 
-A hosted version of the app is available at [spymastergame.ai](https://development.d17hagtvkaouoc.amplifyapp.com/).
+## Key Features
 
-![Spymaster view of board](./app/images/spymasterview.png)
+- **Category-based Board Generation**: Users can enter 5 categories of their choice, making each game more engaging and personalized.
+- **Shareable Boards**: Generated boards can be easily shared with other players.
+- **Real-time Updates**: The board automatically updates as words are revealed during gameplay.
+- **Dual View Modes**: Players can toggle between spymaster and regular player views.
+
+## How It Works
+
+1. Enter 5 categories of your choice
+2. Our AI generates a Codenames board using words related to your categories
+3. Share the board with your friends
+4. Play as either a spymaster or a regular player
+5. Enjoy a unique and engaging Codenames experience!
+
+## Try It Out
+
+A hosted version of Spymastergame AI is available at [spymastergame.com](https://spymastergame.com/).
+
+Experience Codenames like never before with Spymastergame AI - where every game is tailored to your interests!
 
 ## Deploying to AWS
 
-For detailed instructions on deploying your application, refer to the [deployment section](https://docs.amplify.aws/nextjs/start/quickstart/nextjs-app-router-client-components/#deploy-a-fullstack-app-to-aws) of our documentation.
+For detailed instructions on deploying this application, refer to the [deployment section](https://docs.amplify.aws/nextjs/start/quickstart/nextjs-app-router-client-components/#deploy-a-fullstack-app-to-aws) of our documentation.
 
 ## Security
 
