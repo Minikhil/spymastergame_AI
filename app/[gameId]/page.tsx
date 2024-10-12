@@ -229,8 +229,12 @@ export default function Page({ params }: { params: { gameId: string } }) {
     }));
   }
 
-  function createBoard(words: string[]): Card[] {
-    const shuffledWords = shuffleArray(words).slice(0, 25);
+  function createBoard(words: string[], isNewGame = true): Card[] {
+    let shuffledWords = words;
+    if (isNewGame) { 
+      // Shuffle words for new board creation only 
+      shuffledWords = shuffleArray(words).slice(0, 25);
+    }
     const cardTypes = shuffleArray([
       "red", "red", "red", "red", "red", "red", "red", "red", "red",
       "blue", "blue", "blue", "blue", "blue", "blue", "blue", "blue",
@@ -252,7 +256,7 @@ export default function Page({ params }: { params: { gameId: string } }) {
   }
 
   //words need to be all the words on board (25 of them )
-  function shuffleBoard(words: string[]) {
+  function createNewCode(words: string[]) {
     let shuffledCards;
     if (words.length === 0) { 
       console.log("Shuffle Board words is empty: " + words)
@@ -263,9 +267,9 @@ export default function Page({ params }: { params: { gameId: string } }) {
       });
 
       setWords(newWords);
-      shuffledCards = createBoard(newWords)
+      shuffledCards = createBoard(newWords, false)
     } else {
-      shuffledCards = createBoard(words)
+      shuffledCards = createBoard(words, false)
     }
 
     console.log("Shuffle Board with: " + shuffledCards)
@@ -274,7 +278,6 @@ export default function Page({ params }: { params: { gameId: string } }) {
       ...prevState,
       cards: shuffledCards
     }));
-    toggleAllCardsVisibility(spymasterView)
   }
 
   function shuffleArray(array: any[]) {
@@ -430,7 +433,7 @@ export default function Page({ params }: { params: { gameId: string } }) {
 
       <div className="controls">
         {
-        spymasterView && (<button onClick={() => shuffleBoard(words)}>
+        spymasterView && (<button onClick={() => createNewCode(words)}>
           New Code
         </button>)
         }
