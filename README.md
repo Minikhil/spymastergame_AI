@@ -25,13 +25,15 @@ A hosted version of Spymastergame AI is available at [spymastergame.com](https:/
 
 Experience Codenames like never before with Spymastergame AI - where every game is tailored to your interests!
 
+## System Architecture 
+
+This NextJS application is deployed using AWS Amplify. AWS Amplify is a platform that helps developers quickly build and deploy full-stack web and mobile apps.
+
+![spymastergame-arch](./app/images/spymastergame-arch.png)
+
 ## Deploying to AWS
 
 For detailed instructions on deploying this application, refer to the [deployment section](https://docs.amplify.aws/nextjs/start/quickstart/nextjs-app-router-client-components/#deploy-a-fullstack-app-to-aws) of our documentation.
-
-## Security
-
-See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
 
 ## License
 
