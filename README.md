@@ -33,7 +33,13 @@ This NextJS application is deployed using AWS Amplify. AWS Amplify is a platform
 
 ## Deploying to AWS
 
-For detailed instructions on deploying this application, refer to the [deployment section](https://docs.amplify.aws/nextjs/start/quickstart/nextjs-app-router-client-components/#deploy-a-fullstack-app-to-aws) of our documentation.
+1. Clone / Fork this repo
+2. Create OpenAI API key for this repo 
+3. Using AWS Amplify create a new app and connect this repo to AWS Amplify 
+4. In your environment variables add the variable "OPENAI_API_KEY" and the key created in Step 2
+5. Deploy 
+
+For detailed instructions on deploying this application, refer to the [deployment section](https://docs.amplify.aws/nextjs/start/quickstart/nextjs-app-router-client-components/#deploy-a-fullstack-app-to-aws) of AWS Amplify documentation.
 
 ## License
 
