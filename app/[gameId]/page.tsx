@@ -119,8 +119,6 @@ export default function Page({ params }: { params: { gameId: string } }) {
       const { data: gameData, errors } = await dynamoDbClient.models.GameSessions.list({
         filter: { GameID: { eq:gameId?.trim() } }
       });
-
-      console.log("fetched cards data: " + gameData[0].Cards)
   
       // Check if there were any errors
       if (errors) {
@@ -130,10 +128,13 @@ export default function Page({ params }: { params: { gameId: string } }) {
   
       // Check if any game data was found
       if (!gameData || gameData.length === 0) {
-        throw new Error('No game data found for the provided GameID.');
+        throw new Error('No game data found for the provided GameID, please start new game.');
       }
 
       const latestGameRecord = gameData[0]
+
+      // Log data for debugging since it is present 
+      console.log("fetched cards data: " + latestGameRecord)
 
       setGameState((prevState) => ({
         ...prevState,
@@ -407,6 +408,9 @@ export default function Page({ params }: { params: { gameId: string } }) {
         <a href= {fullUrl} target="_blank" rel="noopener noreferrer">
           {fullUrl}
         </a>
+      </p>
+      <p className="intro">
+        Enter below categories then click 'Start' to create a new board. 
       </p>
     </div>
     <div className="category-input">

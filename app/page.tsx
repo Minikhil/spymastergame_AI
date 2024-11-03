@@ -154,7 +154,7 @@ export default function App() {
 
   return (
     <main>
-      <h1>Codenames AI Game</h1>
+      <h1>Codenames AI </h1>
       <p className="intro">
         Play Codenames online across multiple devices on a shared board. 
         To create a new game enter a game identifier and click 'Start'.
