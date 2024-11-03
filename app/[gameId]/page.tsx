@@ -160,13 +160,19 @@ export default function Page({ params }: { params: { gameId: string } }) {
     //card is reference not a copy 
     //This means modifying card will also modify the object within the newCards array.
     const card = newCards[index];
+    let newTeam = gameState.currentTeam;
 
     //Updates the card count 
     if (!card.revealed) {
       card.revealed = true;
       if (card.type === "assassin") {
         endGame(gameState.currentTeam === "red" ? "blue" : "red");
-      }
+      } else if (gameState.currentTeam !== card.type) {
+        //if selecting neutral or opponent teams card then end turn 
+
+        newTeam =  (newTeam === "red" ? "blue" : "red")
+        console.log("Selected wrong color end turn")
+      } 
     }
 
       // Update the state and then insert into DynamoDB
@@ -177,7 +183,8 @@ export default function Page({ params }: { params: { gameId: string } }) {
           cards: newCards,
           blueCardsLeft: card.type === "blue" ? prevState.blueCardsLeft - 1 : prevState.blueCardsLeft,
           redCardsLeft: card.type === "red" ? prevState.redCardsLeft - 1 : prevState.redCardsLeft,
-          totalCardsLeft: prevState.totalCardsLeft - 1
+          totalCardsLeft: prevState.totalCardsLeft - 1,
+          currentTeam: newTeam
         };
         
         // Pass updated state to Insert into DynamoDB
@@ -193,6 +200,7 @@ export default function Page({ params }: { params: { gameId: string } }) {
     try {
       console.log("Game State for Update:", updatedGameState);
       console.log("Updating Cards:", updatedGameState.cards);
+      console.log("New Team", updatedGameState.currentTeam);
 
       const { data: gameData, errors } = await dynamoDbClient.models.GameSessions.list({
         filter: { GameID: { eq: gameState.gameId?.trim() } }
