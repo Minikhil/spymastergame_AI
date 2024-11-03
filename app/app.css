@@ -155,6 +155,10 @@
     width: 150px;
     margin: 5px;
 }
+.game-id-input input {
+  width: 250px;
+  margin: 5px;
+}
 .loading {
     display: none;
     margin: 20px;
