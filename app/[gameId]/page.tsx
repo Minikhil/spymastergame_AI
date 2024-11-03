@@ -169,7 +169,6 @@ export default function Page({ params }: { params: { gameId: string } }) {
         endGame(gameState.currentTeam === "red" ? "blue" : "red");
       } else if (gameState.currentTeam !== card.type) {
         //if selecting neutral or opponent teams card then end turn 
-
         newTeam =  (newTeam === "red" ? "blue" : "red")
         console.log("Selected wrong color end turn")
       } 

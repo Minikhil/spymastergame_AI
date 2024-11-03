@@ -157,14 +157,14 @@ export default function App() {
       <h1>Codenames AI Game</h1>
       <p className="intro">
         Play Codenames online across multiple devices on a shared board. 
-        To create a new game or join an existing game, enter a game identifier and click 'Start'.
+        To create a new game enter a game identifier and click 'Start'.
         </p>
 
       <div className="game-id-input">
         <input
           type="text"
           id="gameId"
-          placeholder="Enter Game ID"
+          placeholder="Enter Game Identifier"
           value={gameState.gameId}
           onChange={handleGameIDChange}
         />
