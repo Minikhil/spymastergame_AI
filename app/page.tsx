@@ -10,6 +10,7 @@ import { Amplify } from "aws-amplify";
 import outputs from "@/amplify_outputs.json";
 import "@aws-amplify/ui-react/styles.css";
 import {LoaderComponent} from "./components/LoaderComponent";
+import {LandingPage} from "./components/landing-page";
 import {Card} from "./types"
 
 Amplify.configure(outputs);
@@ -153,26 +154,30 @@ export default function App() {
   }
 
   return (
-    <main>
-      <h1>Codenames AI </h1>
-      <p className="intro">
-        Play Codenames online across multiple devices on a shared board. 
-        To create a new game enter a game identifier and click 'Start'.
-        </p>
+    // <main>
+    //   <h1>Codenames AI </h1>
+    //   <h1 className="text-3xl font-bold underline">
+    //   Hello world!
+    //  </h1>
+    //   <p className="intro">
+    //     Play Codenames online across multiple devices on a shared board. 
+    //     To create a new game enter a game identifier and click 'Start'.
+    //     </p>
 
-      <div className="game-id-input">
-        <input
-          type="text"
-          id="gameId"
-          placeholder="Enter Game Identifier"
-          value={gameState.gameId}
-          onChange={handleGameIDChange}
-        />
-        <Button variation="primary" colorTheme="success" onClick={handleGenerateWords}>Start</Button>
-      </div>
+    //   <div className="game-id-input">
+    //     <input
+    //       type="text"
+    //       id="gameId"
+    //       placeholder="Enter Game Identifier"
+    //       value={gameState.gameId}
+    //       onChange={handleGameIDChange}
+    //     />
+    //     <Button variation="primary" colorTheme="success" onClick={handleGenerateWords}>Start</Button>
+    //   </div>
 
-      {loading &&  <LoaderComponent />}
-    </main>
+    //   {loading &&  <LoaderComponent />}
+    // </main>
+    <LandingPage/>
   );
 }
 
