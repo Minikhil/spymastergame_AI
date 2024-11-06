@@ -8,13 +8,13 @@ import Link from "next/link"
 
 export function LandingPage() {
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-50">
-      <main className="flex flex-col">
+    <div className="min-h-screen bg-zinc-950 text-zinc-50 w-screen overflow-x-hidden">
+      <main className="flex flex-col w-screen">
         {/* Hero Section */}
-        <section className="relative py-20 md:py-32 overflow-hidden">
-          <div className="container px-4 md:px-6">
+        <section className="relative py-20 md:py-32 w-screen">
+          <div className="w-full max-w-[1400px] mx-auto px-6">
             <div className="flex flex-col items-center text-center space-y-8">
-              <div className="space-y-4">
+              <div className="space-y-4 w-full">
                 <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
                   CODENAMES AI
                 </h1>
@@ -43,8 +43,8 @@ export function LandingPage() {
         </section>
 
         {/* Features Section */}
-        <section className="py-20 bg-zinc-900">
-          <div className="container px-4 md:px-6">
+        <section className="py-20 bg-zinc-900 w-screen">
+          <div className="w-full max-w-[1400px] mx-auto px-6">
             <div className="grid gap-12 lg:grid-cols-4 md:grid-cols-2">
               <div className="flex flex-col items-center space-y-4">
                 <div className="p-3 rounded-full bg-emerald-600/10">
@@ -87,8 +87,8 @@ export function LandingPage() {
         </section>
 
         {/* How to Play Section */}
-        <section className="py-20">
-          <div className="container px-4 md:px-6">
+        <section className="py-20 w-screen">
+          <div className="w-full max-w-[1400px] mx-auto px-6">
             <div className="text-center space-y-12">
               <div className="space-y-4">
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
@@ -126,8 +126,8 @@ export function LandingPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-20 bg-zinc-900">
-          <div className="container px-4 md:px-6">
+        <section className="py-20 bg-zinc-900 w-screen">
+          <div className="w-full max-w-[1400px] mx-auto px-6">
             <div className="flex flex-col items-center space-y-4 text-center">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
                 Ready to Play?
@@ -144,8 +144,8 @@ export function LandingPage() {
       </main>
 
       {/* Footer */}
-      <footer className="py-6 border-t border-zinc-800">
-        <div className="container px-4 md:px-6">
+      <footer className="py-6 border-t border-zinc-800 w-screen">
+        <div className="w-full max-w-[1400px] mx-auto px-6">
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
             <p className="text-sm text-zinc-400">
               © {new Date().getFullYear()} Codenames AI. All rights reserved.

@@ -81,10 +81,10 @@
     min-height: 100vh;
   }
   
-  main {
+  /* main {
     width: 100%;
-    max-width: 500px;
-  }
+    max-width: 100%;
+  } */
   
   h1 {
     text-align: center;
