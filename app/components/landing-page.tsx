@@ -2,11 +2,11 @@
 
 import { Button } from "@/app/components/ui/button"
 import { Input } from "@/app/components/ui/input"
-import { Card, CardContent } from "@/app/components/ui/card"
+import { CardMain, CardContent } from "@/app/components/ui/card"
 import { Brain, Users, Gamepad2, Share2 } from "lucide-react"
 import Link from "next/link"
 
-export function LandingPage() {
+export function LandingPage() {  
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-50 w-screen overflow-x-hidden">
       <main className="flex flex-col w-screen">
@@ -22,7 +22,7 @@ export function LandingPage() {
                   Experience the classic word-guessing game powered by artificial intelligence. Play Codenames online across multiple devices on a shared board.
                 </p>
               </div>
-              <Card className="w-full max-w-sm bg-zinc-900/50 border-zinc-800">
+              <CardMain className="w-full max-w-sm bg-zinc-900/50 border-zinc-800">
                 <CardContent className="p-6">
                   <form className="flex flex-col space-y-4">
                     <div className="space-y-2">
@@ -30,6 +30,8 @@ export function LandingPage() {
                         className="bg-zinc-800 border-zinc-700"
                         placeholder="Enter Game Identifier"
                         type="text"
+                        // value={gameState.gameId}
+                        // onChange={handleGameIDChange}
                       />
                     </div>
                     <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white">
@@ -37,7 +39,7 @@ export function LandingPage() {
                     </Button>
                   </form>
                 </CardContent>
-              </Card>
+              </CardMain>
             </div>
           </div>
         </section>
