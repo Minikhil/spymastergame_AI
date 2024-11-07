@@ -162,6 +162,8 @@ export default function App() {
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-50 w-screen overflow-x-hidden">
       <main className="flex flex-col w-screen">
+        {/* Beta Banner */}
+        
         {/* Hero Section */}
         <section className="relative py-20 md:py-32 w-screen">
           <div className="w-full max-w-[1400px] mx-auto px-6">
@@ -179,7 +181,7 @@ export default function App() {
                   <div className="flex flex-col space-y-4">
                     <div className="space-y-2">
                       <Input
-                        className="bg-zinc-800 border-zinc-700"
+                        className="bg-zinc-800 border-zinc-700 text-white"
                         placeholder="Enter Game Identifier"
                         type="text"
                         value={gameState.gameId}
@@ -254,7 +256,8 @@ export default function App() {
                   Get started with Codenames AI in three simple steps
                 </p>
               </div>
-              <div className="grid gap-8 md:grid-cols-3">
+              <div className="grid gap-8 md:grid-cols-4">
+               
                 <div className="space-y-4">
                   <div className="text-4xl font-bold text-emerald-500">1</div>
                   <h3 className="text-xl font-bold">Create a Game</h3>
@@ -262,20 +265,31 @@ export default function App() {
                     Enter a unique game identifier to create a new game room
                   </p>
                 </div>
+
                 <div className="space-y-4">
                   <div className="text-4xl font-bold text-emerald-500">2</div>
+                  <h3 className="text-xl font-bold">Choose Categories</h3>
+                  <p className="text-zinc-400">
+                  Enter five categories that will be used to generate the game board with words related to your selections.
+                  </p>
+                </div>
+                
+                <div className="space-y-4">
+                  <div className="text-4xl font-bold text-emerald-500">3</div>
                   <h3 className="text-xl font-bold">Share with Friends</h3>
                   <p className="text-zinc-400">
                     Send the game identifier to friends you want to play with
                   </p>
                 </div>
+                
                 <div className="space-y-4">
-                  <div className="text-4xl font-bold text-emerald-500">3</div>
+                  <div className="text-4xl font-bold text-emerald-500">4</div>
                   <h3 className="text-xl font-bold">Start Playing</h3>
                   <p className="text-zinc-400">
                     Join the game and start guessing words with your team
                   </p>
                 </div>
+
               </div>
             </div>
           </div>
@@ -296,7 +310,7 @@ export default function App() {
                   <div className="flex flex-col space-y-4">
                     <div className="space-y-2">
                       <Input
-                        className="bg-zinc-800 border-zinc-700"
+                        className="bg-zinc-800 border-zinc-700 text-white"
                         placeholder="Enter Game Identifier"
                         type="text"
                         value={gameState.gameId}
