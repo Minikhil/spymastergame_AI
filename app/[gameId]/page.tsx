@@ -14,6 +14,7 @@ import "../../app/app.css";
 import {LoaderComponent} from "../components/LoaderComponent";
 import {GameSessionLink} from "../components/GameSessionLink";
 import {Card} from "../types"
+import { Loader2, Copy, Check } from "lucide-react";
 
 Amplify.configure(outputs);
 
@@ -400,64 +401,151 @@ export default function Page({ params }: { params: { gameId: string } }) {
   }
   
   return (
-  <main>
-    <h1>Code Names AI </h1>
-    <div>
-      <p>
-        Send this link to friends:{" "}
-        <a href= {fullUrl} target="_blank" rel="noopener noreferrer">
-          {fullUrl}
-        </a>
-      </p>
-      <p className="intro">
-        Enter below categories then click 'Start' to create a new board. 
-      </p>
-    </div>
-    <div className="category-input">
-        <input type="text" id="category1" placeholder="Category 1" value={categories.category1} onChange={handleChange} />
-        <input type="text" id="category2" placeholder="Category 2" value={categories.category2} onChange={handleChange} />
-        <input type="text" id="category3" placeholder="Category 3" value={categories.category3} onChange={handleChange} />
-        <input type="text" id="category4" placeholder="Category 4" value={categories.category4} onChange={handleChange} />
-        <input type="text" id="category5" placeholder="Category 5" value={categories.category5} onChange={handleChange} />
-        <Button variation="primary" colorTheme="success" onClick={handleGenerateWords}>Start</Button>
-      </div>
+    <main className="min-h-screen bg-black text-white p-4 md:p-8">
+      <h1 className="text-4xl md:text-6xl font-bold text-center mb-8">Codenames AI</h1>
+      
+      <div className="max-w-4xl mx-auto space-y-6">
+        <div className="bg-zinc-900/50 p-6 rounded-lg backdrop-blur">
+          <p className="mb-2">
+            Send this link to friends:{" "}
+            <a href={fullUrl} target="_blank" rel="noopener noreferrer" className="text-emerald-500 hover:underline">
+              {fullUrl}
+            </a>
+          </p>
+          <p className="text-gray-400">
+            Enter below categories then click 'Start' to create a new board.
+          </p>
+        </div>
 
-      {loading &&  <LoaderComponent />}
-
-      <div className="score-board">
-       <span className="turn-indicator"> {`${gameState.currentTeam.charAt(0).toUpperCase() + gameState.currentTeam.slice(1)} Team's Turn: `} </span>
-       <span className="redCardsLeft"> {`${gameState.redCardsLeft} -`} </span>
-       <span className="blueCardsLeft"> {`${gameState.blueCardsLeft}`} </span>
-      </div>
-
-      <div className="game-board">
-        {gameState.cards.map((card, i) => (
-          <div
-            key={i}
-            className={`card ${card.revealed ? card.type : (spymasterView ? card.type + ' hidden' : '')}`}
-            onClick={() => revealCard(i)}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Input
+            type="text"
+            id="category1"
+            placeholder="Category 1"
+            value={categories.category1}
+            onChange={handleChange}
+            className="bg-zinc-800 border-zinc-700 text-white placeholder:text-gray-500"
+          />
+          <Input
+            type="text"
+            id="category2"
+            placeholder="Category 2"
+            value={categories.category2}
+            onChange={handleChange}
+            className="bg-zinc-800 border-zinc-700 text-white placeholder:text-gray-500"
+          />
+          <Input
+            type="text"
+            id="category3"
+            placeholder="Category 3"
+            value={categories.category3}
+            onChange={handleChange}
+            className="bg-zinc-800 border-zinc-700 text-white placeholder:text-gray-500"
+          />
+          <Input
+            type="text"
+            id="category4"
+            placeholder="Category 4"
+            value={categories.category4}
+            onChange={handleChange}
+            className="bg-zinc-800 border-zinc-700 text-white placeholder:text-gray-500"
+          />
+          <Input
+            type="text"
+            id="category5"
+            placeholder="Category 5"
+            value={categories.category5}
+            onChange={handleChange}
+            className="bg-zinc-800 border-zinc-700 text-white placeholder:text-gray-500"
+          />
+          <Button 
+            onClick={handleGenerateWords}
+            className="bg-emerald-600 hover:bg-emerald-700 text-white"
           >
-            {card.word}
+            Start
+          </Button>
+        </div>
+
+        {loading && (
+          <div className="flex justify-center">
+            <Loader2 className="h-8 w-8 animate-spin text-emerald-500" />
           </div>
-        ))}
+        )}
+
+        <div className="bg-zinc-900/50 p-4 rounded-lg flex justify-between items-center">
+          <span className="text-lg font-semibold">
+            {`${gameState.currentTeam.charAt(0).toUpperCase() + gameState.currentTeam.slice(1)} Team's Turn`}
+          </span>
+          <div>
+            <span className="text-red-500 font-bold text-xl mr-2">{gameState.redCardsLeft}</span>
+            <span className="text-blue-500 font-bold text-xl">{gameState.blueCardsLeft}</span>
+          </div>
+        </div>
+
+        {/* Game Board */}
+        <div className="grid grid-cols-5 gap-1 sm:gap-2 max-w-3xl mx-auto">
+          {gameState.cards.map((card, i) => (
+            <div
+              key={i}
+              onClick={() => revealCard(i)}
+              className={`
+                aspect-square flex items-center justify-center p-1 sm:p-2 rounded-lg text-center cursor-pointer transition-all
+                text-xs sm:text-sm md:text-base font-medium overflow-hidden
+                ${card.revealed
+                  ? card.type === 'red' 
+                    ? 'bg-red-600 text-white'
+                    : card.type === 'blue'
+                    ? 'bg-blue-600 text-white'
+                    : card.type === 'black'
+                    ? 'bg-black text-white'
+                    : 'bg-yellow-600 text-black'
+                  : spymasterView
+                  ? card.type === 'red'
+                    ? 'bg-red-900/50 text-white'
+                    : card.type === 'blue'
+                    ? 'bg-blue-900/50 text-white'
+                    : card.type === 'black'
+                    ? 'bg-zinc-800 text-white'
+                    : 'bg-yellow-900/50 text-white'
+                  : 'bg-zinc-800 hover:bg-zinc-700 text-white'
+                }
+              `}
+            >
+              <span className="truncate px-1">{card.word}</span>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex justify-center space-x-4">
+          {spymasterView && (
+            <Button
+              onClick={() => createNewCode(words)}
+              className="bg-purple-600 hover:bg-purple-700 text-white"
+            >
+              New Code
+            </Button>
+          )}
+          <Button
+            onClick={endTurn}
+            className="bg-orange-600 hover:bg-orange-700 text-white"
+          >
+            End Turn
+          </Button>
+          <Button
+            onClick={() => {
+              spyMaster()
+              setSpymasterView(!spymasterView)
+            }}
+            className={`${
+              spymasterView
+                ? 'bg-red-600 hover:bg-red-700'
+                : 'bg-emerald-600 hover:bg-emerald-700'
+            } text-white`}
+          >
+            {spymasterView ? 'Player View' : 'Spy Master'}
+          </Button>
+        </div>
       </div>
-
-      <div className="controls">
-        {
-        spymasterView && (<button onClick={() => createNewCode(words)}>
-          New Code
-        </button>)
-        }
-        
-        <button onClick={endTurn}>
-          End Turn
-          </button>
-
-          <button onClick={spyMaster}>
-          Spy Master
-          </button>
-
-      </div>
-  </main>
-  );
+    </main>
+  )
 }

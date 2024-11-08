@@ -141,7 +141,7 @@ export default function App() {
   
     try {
       console.log("Game State:", updatedState);
-      console.log("Insert Cards:", updatedState.cards);
+      console.log("Insert Cards into DB:", updatedState.cards);
       await dynamoDbClient.models.GameSessions.create({
         GameID: updatedState.gameId,
         CurrentTeam: updatedState.currentTeam,
