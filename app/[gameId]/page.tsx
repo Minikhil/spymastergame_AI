@@ -5,16 +5,15 @@ import { useState, useEffect, useRef } from "react";
 import { generateClient } from "aws-amplify/data";
 import type { GameSessionsSchema } from "@/amplify/data/resource";
 import "../app.css";
-import { Loader, Button, Flex, Input } from '@aws-amplify/ui-react';
+import "../../app/app.css";
 import { Amplify } from "aws-amplify";
 import { useRouter } from 'next/navigation'
 import outputs from "@/amplify_outputs.json";
 import "@aws-amplify/ui-react/styles.css";
-import "../../app/app.css";
-import {LoaderComponent} from "../components/LoaderComponent";
-import {GameSessionLink} from "../components/GameSessionLink";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
 import {Card} from "../types"
-import { Loader2, Copy, Check } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 Amplify.configure(outputs);
 
