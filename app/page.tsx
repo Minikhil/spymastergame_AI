@@ -12,6 +12,7 @@ import {LoaderComponent} from "./components/LoaderComponent";
 import {LandingPage} from "./components/landing-page";
 import {Card} from "./types";
 import { Button } from "./components/ui/button";
+import { BetaBadge } from "./components/ui/beta-badge";
 import { Input } from "./components/ui/input";
 import { CardContent, CardMain } from "./components/ui/card";
 import { Brain, Users, Gamepad2, Share2 } from "lucide-react";
@@ -161,17 +162,18 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-50 w-screen overflow-x-hidden">
-      <main className="flex flex-col w-screen">
-        {/* Beta Banner */}
-        
+      <main className="flex flex-col w-screen"> 
         {/* Hero Section */}
         <section className="relative py-20 md:py-32 w-screen">
           <div className="w-full max-w-[1400px] mx-auto px-6">
             <div className="flex flex-col items-center text-center space-y-8">
               <div className="space-y-4 w-full">
-                <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
-                  CODENAMES AI
-                </h1>
+                <div className="flex items-center justify-center gap-3">
+                  <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
+                    CODENAMES AI
+                  </h1>
+                  <BetaBadge />
+                 </div>
                 <p className="mx-auto max-w-[700px] text-zinc-400 md:text-xl">
                   Experience the classic word-guessing game powered by artificial intelligence. Play Codenames online across multiple devices on a shared board.
                 </p>

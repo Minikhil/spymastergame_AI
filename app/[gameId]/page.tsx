@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation'
 import outputs from "@/amplify_outputs.json";
 import "@aws-amplify/ui-react/styles.css";
 import { Button } from "../components/ui/button";
+import { BetaBadge } from "../components/ui/beta-badge";
 import { Input } from "../components/ui/input";
 import {Card} from "../types"
 import { Loader2 } from "lucide-react";
@@ -401,8 +402,14 @@ export default function Page({ params }: { params: { gameId: string } }) {
   
   return (
     <main className="min-h-screen bg-black text-white p-4 md:p-8">
-      <h1 className="text-4xl md:text-6xl font-bold text-center mb-8">Codenames AI</h1>
-      
+      <div className="space-y-4 w-full">
+        <div className="flex items-center justify-center gap-3">
+          <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
+            CODENAMES AI
+          </h1>
+          <BetaBadge />
+        </div>
+      </div>
       <div className="max-w-4xl mx-auto space-y-6">
         <div className="bg-zinc-900/50 p-6 rounded-lg backdrop-blur">
           <p className="mb-2">
