@@ -181,7 +181,6 @@ export default function App() {
               <CardMain className="w-full max-w-sm bg-zinc-900/50 border-zinc-800">
                 <CardContent className="p-6">
                   <div className="flex flex-col space-y-4">
-                    <div className="space-y-2">
                       <Input
                         className="bg-zinc-800 border-zinc-700 text-white"
                         placeholder="Enter Game Identifier"
@@ -189,9 +188,8 @@ export default function App() {
                         value={gameState.gameId}
                         onChange={handleGameIDChange}
                       />
-                    </div>
                     <Button 
-                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white"
                     onClick={handleGenerateWords}>
                       Start Game
                     </Button>
@@ -320,7 +318,7 @@ export default function App() {
                       />
                     </div>
                     <Button 
-                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white"
                     onClick={handleGenerateWords}>
                       Start Game
                     </Button>
