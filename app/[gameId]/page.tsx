@@ -478,6 +478,7 @@ export default function Page({ params }: { params: { gameId: string } }) {
           </div>
         )}
 
+         {/* Score Board */}
         <div className="bg-zinc-900/50 p-4 rounded-lg flex justify-between items-center">
           <span className="text-lg font-semibold">
             {`${gameState.currentTeam.charAt(0).toUpperCase() + gameState.currentTeam.slice(1)} Team's Turn`}
@@ -495,8 +496,8 @@ export default function Page({ params }: { params: { gameId: string } }) {
               key={i}
               onClick={() => revealCard(i)}
               className={`
-                aspect-square flex items-center justify-center p-1 sm:p-2 rounded-lg text-center cursor-pointer transition-all
-                text-xs sm:text-sm md:text-base font-medium overflow-hidden
+               aspect-[4/3] flex items-center justify-center p-1 sm:p-2 rounded-lg text-center cursor-pointer transition-all
+               text-xs sm:text-sm md:text-base font-medium overflow-hidden
                 ${card.revealed
                   ? card.type === 'red' 
                     ? 'bg-red-600 text-white'
