@@ -5,7 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import { generateClient } from "aws-amplify/data";
 import type { GameSessionsSchema } from "@/amplify/data/resource";
 import "../app.css";
-import "../../app/app.css";
+import "../globals.css"
 import { Amplify } from "aws-amplify";
 import { useRouter } from 'next/navigation'
 import outputs from "@/amplify_outputs.json";
