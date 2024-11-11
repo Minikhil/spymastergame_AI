@@ -401,7 +401,11 @@ export default function Page({ params }: { params: { gameId: string } }) {
   }
   
   return (
-    <main className="min-h-screen bg-black text-white p-4 md:p-8">
+    <main className="min-h-screen bg-black text-white overflow-x-hidden">
+      <div className="p-4 md:p-8">
+      
+      
+      {/* HEADER */}
       <div className="space-y-4 w-full">
         <div className="flex items-center justify-center gap-3">
           <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
@@ -410,6 +414,8 @@ export default function Page({ params }: { params: { gameId: string } }) {
           <BetaBadge />
         </div>
       </div>
+
+      
       <div className="max-w-4xl mx-auto space-y-6">
         <div className="bg-zinc-900/50 p-6 rounded-lg backdrop-blur">
           <p className="mb-2">
@@ -490,7 +496,7 @@ export default function Page({ params }: { params: { gameId: string } }) {
         </div>
 
         {/* Game Board */}
-        <div className="grid grid-cols-5 gap-1 sm:gap-2 max-w-3xl mx-auto">
+        <div className="grid grid-cols-5 gap-2 landscape:gap-2 px-4 landscape:px-0 max-w-3xl mx-auto">
           {gameState.cards.map((card, i) => (
             <div
               key={i}
@@ -552,6 +558,9 @@ export default function Page({ params }: { params: { gameId: string } }) {
             {spymasterView ? 'Player View' : 'Spy Master'}
           </Button>
         </div>
+      </div>
+     
+     
       </div>
     </main>
   )
