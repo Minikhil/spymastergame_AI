@@ -494,9 +494,7 @@ export default function Page({ params }: { params: { gameId: string } }) {
         </div>
 
         {/* Game Board */}
-        <div className="grid grid-cols-5 gap-2 px-4 max-w-2xl mx-auto
-              landscape:max-w-full landscape:gap-1 
-              sm:landscape:max-w-[80vw] sm:landscape:px-2">
+        <div className="grid grid-cols-5 gap-2 px-4 max-w-xl mx-auto">
           {gameState.cards.map((card, i) => (
             <div
               key={i}
