@@ -401,9 +401,7 @@ export default function Page({ params }: { params: { gameId: string } }) {
   }
   
   return (
-    <main className="min-h-screen bg-black text-white overflow-x-hidden">
-      <div className="p-4 md:p-8">
-      
+    <main className="max-h-screen bg-black text-white p-4 md:p-8 overflow-x-hidden">
       
       {/* HEADER */}
       <div className="space-y-4 w-full">
@@ -496,7 +494,7 @@ export default function Page({ params }: { params: { gameId: string } }) {
         </div>
 
         {/* Game Board */}
-        <div className="grid grid-cols-5 gap-2 landscape:gap-2 px-4 landscape:px-0 max-w-3xl mx-auto">
+        <div className="grid grid-cols-5 gap-2 landscape:gap-2 px-4 landscape:px-0 max-w-2xl mx-auto">
           {gameState.cards.map((card, i) => (
             <div
               key={i}
@@ -524,7 +522,7 @@ export default function Page({ params }: { params: { gameId: string } }) {
                 }
               `}
             >
-              <span className="truncate px-1">{card.word}</span>
+              <span className="break-words px-1 text-center">{card.word}</span>
             </div>
           ))}
         </div>
@@ -561,7 +559,6 @@ export default function Page({ params }: { params: { gameId: string } }) {
       </div>
      
      
-      </div>
     </main>
   )
 }
