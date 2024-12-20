@@ -114,7 +114,8 @@ export default function Page({ params }: { params: { gameId: string } }) {
   //   console.log(allGames);
   // }
 
-  async function fetchGameData(gameId: String) {
+  
+  async function fetchGameData(gameId: String) { //ToDo: Issue in this function fix it 
     try {
 
       const { data: gameData, errors } = await dynamoDbClient.models.GameSessions.list({
