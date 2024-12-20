@@ -115,7 +115,7 @@ export default function Page({ params }: { params: { gameId: string } }) {
   // }
 
   
-  async function fetchGameData(gameId: String) { //ToDo: Issue in this function fix it 
+  async function fetchGameData(gameId: String) {  
     try {
 
       const { data: gameData, errors } = await dynamoDbClient.models.GameSessions.list({
@@ -508,7 +508,7 @@ export default function Page({ params }: { params: { gameId: string } }) {
                     ? 'bg-red-600 text-white'
                     : card.type === 'blue'
                     ? 'bg-blue-600 text-white'
-                    : card.type === 'black'
+                    : card.type === 'assassin'
                     ? 'bg-black text-white'
                     : 'bg-yellow-600 text-black'
                   : spymasterView
@@ -516,7 +516,7 @@ export default function Page({ params }: { params: { gameId: string } }) {
                     ? 'bg-red-900/50 text-white'
                     : card.type === 'blue'
                     ? 'bg-blue-900/50 text-white'
-                    : card.type === 'black'
+                    : card.type === 'assassin'
                     ? 'bg-zinc-800 text-white'
                     : 'bg-yellow-900/50 text-white'
                   : 'bg-zinc-800 hover:bg-zinc-700 text-white'
