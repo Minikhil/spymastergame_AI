@@ -159,6 +159,8 @@ export default function App() {
     }
   }
 
+  const startGamePlaceHolder = "Enter any name for your game, no spaces"
+
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-50 w-screen overflow-x-hidden">
       <main className="flex flex-col w-screen"> 
@@ -182,7 +184,7 @@ export default function App() {
                   <div className="flex flex-col space-y-4">
                       <Input
                         className="bg-zinc-800 border-zinc-700 text-white"
-                        placeholder="Enter Game Identifier"
+                        placeholder= {startGamePlaceHolder}
                         type="text"
                         value={gameState.gameId}
                         onChange={handleGameIDChange}
@@ -214,7 +216,7 @@ export default function App() {
                 </div>
                 <h3 className="text-xl font-bold">AI Powered</h3>
                 <p className="text-center text-zinc-400">
-                  Enhanced gameplay with intelligent AI spymasters
+                  Enhanced gameplay with intelligent AI board creation
                 </p>
               </div>
               <div className="flex flex-col items-center space-y-4">
@@ -315,7 +317,7 @@ export default function App() {
                     <div className="space-y-2">
                       <Input
                         className="bg-zinc-800 border-zinc-700 text-white"
-                        placeholder="Enter Game Identifier"
+                        placeholder= {startGamePlaceHolder}
                         type="text"
                         value={gameState.gameId}
                         onChange={handleGameIDChange}
