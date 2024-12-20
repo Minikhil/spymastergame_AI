@@ -81,7 +81,7 @@ export default function Page({ params }: { params: { gameId: string } }) {
       next: (data) => {
         console.log("New Score Red: " + data.RedCardsLeft + "Blue: " + data.BlueCardsLeft +
            " spyMasterView" + spymasterViewRef.current)
-        
+
         setGameState((prevState) => ({
 
         ...prevState,
@@ -174,27 +174,38 @@ export default function Page({ params }: { params: { gameId: string } }) {
         //if selecting neutral or opponent teams card then end turn 
         newTeam =  (newTeam === "red" ? "blue" : "red")
         console.log("Selected wrong color end turn")
-      } 
+      }
     }
 
-      // Update the state and then insert into DynamoDB
-      setGameState(prevState => {
-        //update state 
-        const updatedState = {
-          ...prevState,
-          cards: newCards,
-          blueCardsLeft: card.type === "blue" ? prevState.blueCardsLeft - 1 : prevState.blueCardsLeft,
-          redCardsLeft: card.type === "red" ? prevState.redCardsLeft - 1 : prevState.redCardsLeft,
-          totalCardsLeft: prevState.totalCardsLeft - 1,
-          currentTeam: newTeam
-        };
-        
-        // Pass updated state to Insert into DynamoDB
-        updateGameSession(updatedState);
-        
-        // return to set the gameState 
-        return updatedState;
-      });
+    // Update the state and then insert into DynamoDB
+    setGameState(prevState => {
+      //update state 
+      const updatedState = {
+        ...prevState,
+        cards: newCards,
+        blueCardsLeft: card.type === "blue" ? prevState.blueCardsLeft - 1 : prevState.blueCardsLeft,
+        redCardsLeft: card.type === "red" ? prevState.redCardsLeft - 1 : prevState.redCardsLeft,
+        totalCardsLeft: prevState.totalCardsLeft - 1,
+        currentTeam: newTeam
+      };
+      
+      // Pass updated state to Insert into DynamoDB
+      updateGameSession(updatedState);
+
+      isGameOver(updatedState.blueCardsLeft, updatedState.redCardsLeft)
+      
+      // return to set the gameState 
+      return updatedState;
+    });
+  }
+
+  function isGameOver(blueCardsLeft : number , redCardsLeft : number) {
+    console.log("check is game over: " + redCardsLeft + ":" + blueCardsLeft)
+    if (blueCardsLeft == 0) {
+      endGame("blue");
+    } else if (redCardsLeft == 0) {
+      endGame("red");
+    }
   }
 
   async function updateGameSession(updatedGameState: typeof gameState) {
@@ -301,7 +312,7 @@ export default function Page({ params }: { params: { gameId: string } }) {
   
   function endGame(winner: string) {
     alert(`${winner.charAt(0).toUpperCase() + winner.slice(1)} team wins!`);
-    toggleAllCardsVisibility(true) //once game ends reveal board
+    spyMaster()
   }
 
   function spyMaster() {
