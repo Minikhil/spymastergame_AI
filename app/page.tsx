@@ -15,7 +15,7 @@ import { Button } from "./components/ui/button";
 import { BetaBadge } from "./components/ui/beta-badge";
 import { Input } from "./components/ui/input";
 import { CardContent, CardMain } from "./components/ui/card";
-import { Brain, Users, Gamepad2, Share2 } from "lucide-react";
+import { Brain, Users, Gamepad2, Share2, Loader2 } from "lucide-react";
 import Link from "next/link";
 
 Amplify.configure(outputs);
@@ -88,13 +88,12 @@ export default function App() {
 
   async function handleGenerateWords() {
     console.log("Running handleGenerateWords!");
+    setLoading(true);
 
     if (gameState.gameId === "") {
       alert("Please enter game ID.");
       return;
     }
-
-    setLoading(true);
   
     try {
       /**
@@ -130,7 +129,7 @@ export default function App() {
       console.error("Error generating words:", error);
       alert("There was an error generating words. Please try again.");
     } finally {
-      setLoading(false);
+      // setLoading(false);
     }
   }
 
@@ -193,6 +192,11 @@ export default function App() {
                     onClick={handleGenerateWords}>
                       Start Game
                     </Button>
+                    {loading && (
+                    <div className="flex justify-center">
+                      <Loader2 className="h-8 w-8 animate-spin text-emerald-500" />
+                    </div>
+                    )}
                   </div>
                 </CardContent>
               </CardMain>
