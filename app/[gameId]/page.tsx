@@ -316,6 +316,10 @@ export default function Page({ params }: { params: { gameId: string } }) {
   }
 
   function spyMaster() {
+    if (spymasterView) {
+      //Once spymaster view is enabled cannot revert back to player view to avoid cheating by players 
+      return 
+    }
    setSpymasterView(!spymasterView)
   }
 
@@ -557,7 +561,6 @@ export default function Page({ params }: { params: { gameId: string } }) {
           <Button
             onClick={() => {
               spyMaster()
-              setSpymasterView(!spymasterView)
             }}
             className={`${
               spymasterView
@@ -565,7 +568,7 @@ export default function Page({ params }: { params: { gameId: string } }) {
                 : 'bg-emerald-600 hover:bg-emerald-700'
             } text-white`}
           >
-            {spymasterView ? 'Player View' : 'Spy Master'}
+            {spymasterView ? 'Spy Master View' : 'Spy Master'}
           </Button>
         </div>
       </div>
