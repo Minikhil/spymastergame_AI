@@ -208,6 +208,25 @@ export default function Page({ params }: { params: { gameId: string } }) {
     }
   }
 
+  function isGameInprogress() {
+
+    if (gameState.blueCardsLeft != 8) {
+      return true
+    } else if (gameState.redCardsLeft != 9) {
+      return true
+    } else {
+
+      for (const card of gameState.cards) {
+        if (card.revealed){
+          return true
+        }
+      }
+      
+    }
+
+    return false
+  }
+
   async function updateGameSession(updatedGameState: typeof gameState) {
   
     try {
@@ -548,6 +567,7 @@ export default function Page({ params }: { params: { gameId: string } }) {
             <Button
               onClick={() => createNewCode(words)}
               className="bg-purple-600 hover:bg-purple-700 text-white"
+              disabled = {isGameInprogress()}
             >
               New Code
             </Button>
