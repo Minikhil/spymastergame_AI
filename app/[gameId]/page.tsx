@@ -418,9 +418,9 @@ export default function Page({ params }: { params: { gameId: string } }) {
       {/* HEADER */}
       <div className="space-y-4 w-full">
         <div className="flex items-center justify-center gap-3">
-          <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
+          <a href={process.env.NEXT_PUBLIC_DOMAIN} className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
             CODENAMES AI
-          </h1>
+          </a>
           <BetaBadge />
         </div>
       </div>

@@ -170,13 +170,13 @@ export default function App() {
             <div className="flex flex-col items-center text-center space-y-8">
               <div className="space-y-4 w-full">
                 <div className="flex items-center justify-center gap-3">
-                  <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
+                   <a href={process.env.NEXT_PUBLIC_DOMAIN} className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
                     CODENAMES AI
-                  </h1>
+                  </a>
                   <BetaBadge />
                  </div>
                 <p className="mx-auto max-w-[700px] text-zinc-400 md:text-xl">
-                  Experience the classic word-guessing game powered by artificial intelligence. Play Codenames online across multiple devices on a shared board.
+                  Experience the classic word-guessing game powered by AI. Play Codenames online across multiple devices on a shared board.
                 </p>
               </div>
               <CardMain className="w-full max-w-sm bg-zinc-900/50 border-zinc-800">
