@@ -572,12 +572,16 @@ export default function Page({ params }: { params: { gameId: string } }) {
               New Code
             </Button>
           )}
-          <Button
-            onClick={endTurn}
-            className="bg-orange-600 hover:bg-orange-700 text-white"
-          >
-            End Turn
-          </Button>
+          {
+            !spymasterView && (
+              <Button
+              onClick={endTurn}
+              className="bg-orange-600 hover:bg-orange-700 text-white"
+              >
+                End Turn
+              </Button>
+            )
+          }
           <Button
             onClick={() => {
               spyMaster()
