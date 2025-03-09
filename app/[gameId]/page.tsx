@@ -26,6 +26,7 @@ export default function Page({ params }: { params: { gameId: string } }) {
   const router = useRouter();
 
   const [fullUrl, setFullUrl] = useState('');
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -452,13 +453,26 @@ export default function Page({ params }: { params: { gameId: string } }) {
       
       <div className="max-w-4xl mx-auto space-y-6">
         <div className="bg-zinc-900/50 p-6 rounded-lg backdrop-blur">
-          <p className="mb-2">
-            Send this link to friends:{" "}
-            <a href={fullUrl} target="_blank" rel="noopener noreferrer" className="text-emerald-500 hover:underline">
-              {fullUrl}
-            </a>
-          </p>
-          <p className="text-gray-400">
+          <div className="flex flex-col space-y-4">
+            <p className="text-lg font-medium">Send this link to friends:</p>
+            <div className="flex items-center gap-3">
+              <code className="flex-1 bg-zinc-800 px-3 py-2 rounded text-emerald-500 overflow-x-auto">
+                {fullUrl}
+              </code>
+              <Button
+                onClick={() => {
+                  navigator.clipboard.writeText(fullUrl);
+                  setCopied(true);
+                  setTimeout(() => setCopied(false), 2000);
+                }}
+                className="whitespace-nowrap bg-emerald-600 hover:bg-emerald-700"
+                disabled={copied}
+              >
+                {copied ? 'Copied!' : 'Copy Link'}
+              </Button>
+            </div>
+          </div>
+          <p className="mt-4 text-gray-400">
             Enter below categories then click 'Start' to create a new board.
           </p>
         </div>
