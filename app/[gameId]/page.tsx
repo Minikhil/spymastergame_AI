@@ -529,7 +529,7 @@ export default function Page({ params }: { params: { gameId: string } }) {
               }
               setCategoriesVisible(!categoriesVisible);
             }}
-            className="bg-emerald-600 hover:bg-emerald-700 text-white"
+            className={`bg-emerald-600 hover:bg-emerald-700 text-white ${!categoriesVisible ? 'md:col-span-3 mx-auto' : ''}`}
           >
             {categoriesVisible ? 'Start' : 'New Categories'}
           </Button>
